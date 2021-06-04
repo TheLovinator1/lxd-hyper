@@ -1,0 +1,9 @@
+{% if container_list %}
+    <ul>
+    {% for container in container_list %}
+        <li>{{ container.status }}: <a href="{% url 'detail' container.name %}">{{ container.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Found no containers.</p>
+{% endif %}
