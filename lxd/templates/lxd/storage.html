@@ -1,0 +1,13 @@
+{% extends 'lxd/base.html' %}
+
+{% block content %}
+{% if storage_pools %}
+    <ul>
+    {% for storage in storage_pools %}
+        <li>{{ storage.driver  }}: <a href="{% url 'storage_detail' storage.name %}">{{ storage.name }}</a></li> {# TODO: add https://pylxd.readthedocs.io/en/latest/storage-pools.html#storage-pool-object-attributes config and managed #}
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Found no storage pools.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'lxd/base.html' %}
+
+{% block content %}
+<h1>{{ storage.name }}</h1>
+<li>Driver: {{ storage.driver }}</li>
+<li>Size: {{ storage_size }}</li>
+<li>Soruce: {{ storage_source }}</li>
+<li>Description: {{ storage_config.description }}</li>
+
+{% if storage.driver == "zfs" %}
+<li>ZFS pool name: {{ storage_zfs_name }}</li>
+{% endif %}
+
+<li>Volumes:</li>
+<ul>
+    {% for volume in volumes %}
+    <li><a href="{% url 'container_detail' volume.name %}"> {{ volume.name }}</a></li>
+    {% endfor %}
+</ul>
+{% endblock %}

@@ -1,9 +1,12 @@
-{% if container_list %}
-    <ul>
-    {% for container in container_list %}
-        <li>{{ container.status }}: <a href="{% url 'detail' container.name %}">{{ container.name }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>Found no containers.</p>
-{% endif %}
+{% extends 'lxd/base.html' %}
+
+{% block content %}
+Host info:
+<p>Firewall: {{ firewall }}</p>
+<p>Kernel: {{ kernel_version }}</p>
+<p>Server name: {{ server_name }}</p>
+<p>lxc version: {{ lxc_version }}</p>
+<p>OS name: {{ os_name }}</p>
+<p>Storage: {{ storage }}</p>
+<p>Storage version: {{ storage_version }}</p>
+{% endblock %}

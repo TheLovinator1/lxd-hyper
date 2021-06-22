@@ -1,0 +1,9 @@
+{% extends 'lxd/base.html' %}
+
+{% block content %}
+<h1>{{ image.fingerprint }}</h1>
+<li>Architecture: {{ image.architecture }}</li>
+<li>Size: {{ image.size }} bytes</li>
+<li>Expires at: {{ image.expires_at }}</li>
+<li>Created at: {{ image.created_at }}</li>
+{% endblock %}

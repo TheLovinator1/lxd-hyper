@@ -1,0 +1,58 @@
+html {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+.navbar {
+  border-style: groove;
+  height: 20px;
+  width: 100%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 163px;
+}
+
+.navbar a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none; /* Remove underline*/
+  font-size: 14px;
+  color: #000000;
+}
+
+.navbar a:hover {
+  color: #0099ff;
+}
+
+.sidebar {
+  border-style: groove;
+  height: 100%;
+  width: 160px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+.sidebar a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none; /* Remove underline*/
+  font-size: 14px;
+  color: #000000;
+  display: block;
+}
+
+.sidebar a:hover {
+  color: #0099ff;
+}
+
+.main {
+  margin-left: 160px;
+  margin-top: 40px;
+  padding: 0px 10px;
+}
