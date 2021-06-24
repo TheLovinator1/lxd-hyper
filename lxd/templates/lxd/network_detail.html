@@ -1,0 +1,29 @@
+{% extends 'lxd/base.html' %}
+
+{% block content %}
+<h1>{{ network.name }}</h1>
+
+<h3>Network attributes</h3>
+{% if network.description|length > 0 %}
+    <li><strong>Description:</strong> {{ network.description }}</li>
+{% else %}
+    <li><strong>Description:</strong> None</li>
+{% endif %}
+
+<li><strong>Type:</strong> {{ network.type }}</li>
+<li><strong>Managed:</strong> {{ network.managed }}</li>
+
+{% if ipv4_address %}
+<li><strong>ipv4 address:</strong> {{ ipv4_address }}</li>
+{% endif %}
+
+{% if ipv4_nat %}
+<li><strong>ipv4 nat:</strong> {{ ipv4_nat }}</li>
+{% endif %}
+
+{% if ipv6_address %}
+<li><strong>ipv6 address:</strong> {{ ipv6_address }}</li>
+{% endif %}
+
+
+{% endblock %}

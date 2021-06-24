@@ -17,4 +17,8 @@ urlpatterns = [
     path("storage/", views.list_storage, name="list_storage"),
     # /storage/default/
     path("storage/<str:storage_name>/", views.storage_detail, name="storage_detail"),
+    # /networks/
+    path("networks/", views.list_networks, name="list_networks"),
+    # /network/lxdbr0/
+    path("network/<str:network_name>/", views.network_detail, name="network_detail"),
 ]

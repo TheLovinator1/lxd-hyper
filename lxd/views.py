@@ -60,6 +60,35 @@ def image_detail(request, image_fingerprint):
             return render(request, "lxd/image_detail.html", context)
 
 
+def list_networks(request):
+    networks_list = client.networks.all()
+    container_list = client.containers.all()
+    context = {
+        "container_list": container_list,
+        "networks_list": networks_list,
+    }
+    return render(request, "lxd/networks.html", context)
+
+
+def network_detail(request, network_name):
+    # FIXME: Add support for 404
+    container_list = client.containers.all()
+    networks_list = client.networks.all()
+    for network in networks_list:
+        if network.name == network_name:
+            context = {
+                "container_list": container_list,
+                "network": network,
+            }
+            if network.config:
+                if network.config['ipv4.address']:
+                    context["ipv4_address"] = network.config['ipv4.address']
+                if network.config['ipv4.nat']: 
+                    context["ipv4_nat"] = network.config['ipv4.nat']
+                if network.config['ipv6.address']:
+                    context["ipv6_address"] =  network.config['ipv6.address'] # TODO: Check if ipv6_nat exists
+            return render(request, "lxd/network_detail.html", context)
+
 def list_storage(request):
     container_list = client.containers.all()
     storage_pools = client.storage_pools.all()
