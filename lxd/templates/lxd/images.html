@@ -2,12 +2,12 @@
 
 {% block content %}
 {% if images_list %}
-    <ul>
+<ul>
     {% for image in images_list %}
-        <li><a href="{% url 'image_detail' image.fingerprint %}">{{ image.filename }}</a> - {{ image.size }} bytes</li>
+    <li><a href="{% url 'image_detail' image.fingerprint %}">{{ image.filename }}</a> - {{ image.size }} bytes</li>
     {% endfor %}
-    </ul>
+</ul>
 {% else %}
-    <p>Found no images.</p>
+<p>Found no images.</p>
 {% endif %}
 {% endblock %}

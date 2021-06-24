@@ -2,12 +2,13 @@
 
 {% block content %}
 {% if storage_pools %}
-    <ul>
+<ul>
     {% for storage in storage_pools %}
-        <li>{{ storage.driver  }}: <a href="{% url 'storage_detail' storage.name %}">{{ storage.name }}</a></li> {# TODO: add https://pylxd.readthedocs.io/en/latest/storage-pools.html#storage-pool-object-attributes config and managed #}
+    <li>{{ storage.driver  }}: <a href="{% url 'storage_detail' storage.name %}">{{ storage.name }}</a></li>
+    {# TODO: add https://pylxd.readthedocs.io/en/latest/storage-pools.html#storage-pool-object-attributes config and managed #}
     {% endfor %}
-    </ul>
+</ul>
 {% else %}
-    <p>Found no storage pools.</p>
+<p>Found no storage pools.</p>
 {% endif %}
 {% endblock %}

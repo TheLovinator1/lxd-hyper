@@ -2,12 +2,12 @@
 
 {% block content %}
 {% if networks_list %}
-    <ul>
+<ul>
     {% for network in networks_list %}
-        <li><a href="{% url 'network_detail' network.name %}">{{ network.type }}: {{ network.name }}</a></li>
+    <li><a href="{% url 'network_detail' network.name %}">{{ network.type }}: {{ network.name }}</a></li>
     {% endfor %}
-    </ul>
+</ul>
 {% else %}
-    <p>Found no networks.</p>
+<p>Found no networks.</p>
 {% endif %}
 {% endblock %}

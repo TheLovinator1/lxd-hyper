@@ -1,44 +1,46 @@
 {% load static %}
 <!doctype html>
 <html lang="en">
-    <head>
-        <!-- Required meta tags -->
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>lxd-hyper</title>
-    </head>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <body>
-        <link rel="stylesheet" href="{% static 'css/style.css'%}">
+    <title>lxd-hyper</title>
+</head>
 
-        <!-- Navbar -->
-        <div class="navbar"> 
-            <a href="{% url 'list_images' %}">💿 Images</a>
-            <a href="{% url 'list_storage' %}">🛀 Storage pools</a>
-            <a href="{% url 'list_networks' %}">📶 Networks</a>
-            <a href="{% url 'list_profiles' %}">🧔 Profiles</a>
-            <a href="{% url 'about' %}">❓ About</a>
-        </div>
+<body>
+    <link rel="stylesheet" href="{% static 'css/style.css'%}">
 
-        <!-- Sidebar -->
-        <div class="sidebar">
-            {% if container_list %}
-                {% for container in container_list %}
-                <a href="{% url 'container_detail' container.name %}"> {{ container.name }}
-                    {% if container.status == "Stopped" %}🔴{% endif %}
-                    {% if container.status == "Running"%}🟢{% endif %}
-                </a>
-                {% endfor %}
-            {% else %}
-                Found no containers.
-            {% endif %}
-        </div>
+    <!-- Navbar -->
+    <div class="navbar">
+        <a href="{% url 'list_images' %}">💿 Images</a>
+        <a href="{% url 'list_storage' %}">🛀 Storage pools</a>
+        <a href="{% url 'list_networks' %}">📶 Networks</a>
+        <a href="{% url 'list_profiles' %}">🧔 Profiles</a>
+        <a href="{% url 'about' %}">❓ About</a>
+    </div>
 
-        <div class="main">
-            <!-- Content -->
-            {% block content %}
-            {% endblock %}
-        </div>
-    </body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        {% if container_list %}
+        {% for container in container_list %}
+        <a href="{% url 'container_detail' container.name %}"> {{ container.name }}
+            {% if container.status == "Stopped" %}🔴{% endif %}
+            {% if container.status == "Running"%}🟢{% endif %}
+        </a>
+        {% endfor %}
+        {% else %}
+        Found no containers.
+        {% endif %}
+    </div>
+
+    <div class="main">
+        <!-- Content -->
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+
 </html>

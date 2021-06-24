@@ -2,12 +2,12 @@
 
 {% block content %}
 {% if profiles_list %}
-    <ul>
+<ul>
     {% for profile in profiles_list %}
-        <li><a href="{% url 'profile_detail' profile.name %}">{{ profile.name }} - {{ profile.description }}</a></li>
+    <li><a href="{% url 'profile_detail' profile.name %}">{{ profile.name }} - {{ profile.description }}</a></li>
     {% endfor %}
-    </ul>
+</ul>
 {% else %}
-    <p>Found no profiles.</p>
+<p>Found no profiles.</p>
 {% endif %}
 {% endblock %}

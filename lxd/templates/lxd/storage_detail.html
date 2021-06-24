@@ -7,9 +7,9 @@
 <li><strong>Source:</strong> {{ storage.config.source }}</li>
 <li><strong>Dirty:</strong> {{ storage.dirty }}</li>
 {% if storage.config.description|length > 0 %}
-    <li><strong>Description:</strong> {{ storage.config.description }}</li>
+<li><strong>Description:</strong> {{ storage.config.description }}</li>
 {% else %}
-    <li><strong>Description:</strong> None</li>
+<li><strong>Description:</strong> None</li>
 {% endif %}
 
 {% if storage.driver == "zfs" %}

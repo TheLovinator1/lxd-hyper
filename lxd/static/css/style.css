@@ -18,7 +18,7 @@ body {
 
 .navbar a {
   padding: 6px 8px 6px 16px;
-  text-decoration: none; /* Remove underline*/
+  text-decoration: none;
   font-size: 14px;
   color: #000000;
 }
@@ -41,7 +41,7 @@ body {
 
 .sidebar a {
   padding: 6px 8px 6px 16px;
-  text-decoration: none; /* Remove underline*/
+  text-decoration: none;
   font-size: 14px;
   color: #000000;
   display: block;

@@ -5,7 +5,7 @@
 
 <h3>Image attributes</h3>
 {% for alias in image.aliases %}
-    <li><strong>Alias {{ forloop.counter }}</strong>: {{ alias }}</li>
+<li><strong>Alias {{ forloop.counter }}</strong>: {{ alias }}</li>
 {% endfor %}
 <li><strong>Auto update:</strong> {{ image.auto_update }}</li>
 <li><strong>Architecture:</strong> {{ image.architecture }}</li>
