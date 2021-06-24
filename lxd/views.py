@@ -8,7 +8,7 @@ def index(request):
         "firewall": client.host_info['environment']['firewall'],
         "kernel_version": client.host_info['environment']['kernel_version'],
         "server_name": client.host_info['environment']['server_name'],
-        "lxc_version": client.host_info['environment']['server_version'],
+        "lxd_version": client.host_info['environment']['server_version'],
         "os_name": client.host_info['environment']['os_name'],
         "storage": client.host_info['environment']['storage'],
         "storage_version": client.host_info['environment']['storage_version'],
