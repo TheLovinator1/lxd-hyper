@@ -71,6 +71,7 @@ def list_storage(request):
 
 
 def storage_detail(request, storage_name: str):
+    # TODO: Add zfs.pool_name
     container_list = client.containers.all()
     storage_pools = client.storage_pools.all()
     if client.storage_pools.exists(storage_name):
@@ -81,9 +82,6 @@ def storage_detail(request, storage_name: str):
             "storage_pools": storage_pools,
             "volumes": volumes,
             "storage": storage,
-            "storage_size": storage.config['size'], # Size of the storage pool in bytes
-            "storage_source": storage.config['source'], # Path to block device, loop file or filesystem entry
-            "storage_zfs_name": storage.config['zfs.pool_name'], # Name of the zpool
         }
         return render(request, "lxd/storage_detail.html", context)
     else:

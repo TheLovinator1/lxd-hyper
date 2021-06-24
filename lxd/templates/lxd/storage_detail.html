@@ -3,12 +3,13 @@
 {% block content %}
 <h1>{{ storage.name }}</h1>
 <li>Driver: {{ storage.driver }}</li>
-<li>Size: {{ storage_size }}</li>
-<li>Soruce: {{ storage_source }}</li>
-<li>Description: {{ storage_config.description }}</li>
+<li>Size: {{ storage.config.size }}</li>
+<li>Soruce: {{ storage.config.source }}</li>
+<li>Dirty: {{ storage.dirty }}</li>
+<li>Description: {{ storage.config.description }}</li>
 
 {% if storage.driver == "zfs" %}
-<li>ZFS pool name: {{ storage_zfs_name }}</li>
+<li>ZFS pool name: {{ storage.config.zfs.pool_name }}</li>
 {% endif %}
 
 <li>Volumes:</li>
