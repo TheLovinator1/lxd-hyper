@@ -139,3 +139,31 @@ def profile_detail(request, profile_name: str):
         return render(request, "lxd/profile_detail.html", context)
     else:
         return "404 - No profile with that name."  # TODO: Make sexier
+
+def list_projects(request):
+    container_list = client.containers.all()
+    projects_list = client.projects.all()
+    context = {
+        "container_list": container_list,
+        "projects_list": projects_list,
+    }
+    return render(request, "lxd/projects.html", context)
+
+
+def project_detail(request, project_name: str):
+    container_list = client.containers.all()
+    projects_list = client.projects.all()
+    if client.projects.exists(project_name):
+        project = client.projects.get(project_name)
+        context = {
+            "container_list": container_list,
+            "projects_list": projects_list,
+            "project": project,
+            "features_images": project.config['features.images'],
+            "features_networks": project.config['features.networks'],
+            "features_profiles": project.config['features.profiles'],
+            "features_storage_volumes": project.config['features.storage.volumes'],
+        }
+        return render(request, "lxd/project_detail.html", context)
+    else:
+        return "404 - No project with that name."  # TODO: Make sexier

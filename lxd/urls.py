@@ -25,4 +25,8 @@ urlpatterns = [
     path("profiles/", views.list_profiles, name="list_profiles"),
     # /profile/default/
     path("profile/<str:profile_name>/", views.profile_detail, name="profile_detail"),
+    # /projects/
+    path("projects/", views.list_projects, name="list_projects"),
+    # /project/default/
+    path("project/<str:project_name>/", views.project_detail, name="project_detail"),
 ]
