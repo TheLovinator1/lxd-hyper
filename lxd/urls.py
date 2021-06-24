@@ -29,4 +29,6 @@ urlpatterns = [
     path("projects/", views.list_projects, name="list_projects"),
     # /project/default/
     path("project/<str:project_name>/", views.project_detail, name="project_detail"),
+    # /certificates/
+    path("certificates/", views.list_certificates, name="list_certificates"),
 ]

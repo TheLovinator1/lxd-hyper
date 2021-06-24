@@ -1,0 +1,13 @@
+{% extends 'lxd/base.html' %}
+
+{% block content %}
+{% if certificates_list %}
+<ul>
+    {% for certificate in certificates_list %}
+    <li>{{ certificate.fingerprint }} <code>{{ certificate.certificate }}</code></li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>Found no certificates.</p>
+{% endif %}
+{% endblock %}

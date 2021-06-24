@@ -167,3 +167,13 @@ def project_detail(request, project_name: str):
         return render(request, "lxd/project_detail.html", context)
     else:
         return "404 - No project with that name."  # TODO: Make sexier
+
+
+def list_certificates(request):
+    container_list = client.containers.all()
+    certificates_list = client.certificates.all()
+    context = {
+        "container_list": container_list,
+        "certificates_list": certificates_list,
+    }
+    return render(request, "lxd/certificates.html", context)
