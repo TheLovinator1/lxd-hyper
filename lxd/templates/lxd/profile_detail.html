@@ -1,0 +1,37 @@
+{% extends 'lxd/base.html' %}
+
+{% block content %}
+<h1>{{ profile.name }}</h1>
+
+<h3>Profile attributes</h3>
+{% if profile.description|length > 0 %}
+    <li><strong>Description:</strong> {{ profile.description }}</li>
+{% else %}
+    <li><strong>Description:</strong> None</li>
+{% endif %}
+
+<li><strong>Used by:</strong></li>
+<ul>
+{% for container in profile.used_by %}
+    <li>{{ container }}</li>
+{% endfor %}
+</ul>
+
+<li><strong>Dirty:</strong> {{ profile.dirty }}</li>
+
+<li><strong>Devices:</strong></li>
+<ul>
+<li><strong>eth0:</strong></li>
+<ul>
+<li><strong>Name:</strong> {{ profile.devices.eth0.name }}</li>
+<li><strong>Network:</strong> {{ profile.devices.eth0.network }}</li>
+<li><strong>Type:</strong> {{ profile.devices.eth0.type }}</li>
+</ul>
+<li><strong>root:</strong></li>
+<ul>
+<li><strong>Path:</strong> {{ profile.devices.root.path }}</li>
+<li><strong>Pool:</strong> {{ profile.devices.root.pool }}</li>
+<li><strong>Type:</strong> {{ profile.devices.root.type }}</li>
+</ul>
+</ul>
+{% endblock %}

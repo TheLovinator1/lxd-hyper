@@ -115,3 +115,27 @@ def storage_detail(request, storage_name: str):
         return render(request, "lxd/storage_detail.html", context)
     else:
         return "404 - No storage pool with that name."  # TODO: Make sexier
+
+def list_profiles(request):
+    container_list = client.containers.all()
+    profiles_list = client.profiles.all()
+    context = {
+        "container_list": container_list,
+        "profiles_list": profiles_list,
+    }
+    return render(request, "lxd/profiles.html", context)
+
+
+def profile_detail(request, profile_name: str):
+    container_list = client.containers.all()
+    profiles_list = client.profiles.all()
+    if client.profiles.exists(profile_name):
+        profile = client.profiles.get(profile_name)
+        context = {
+            "container_list": container_list,
+            "profiles_list": profiles_list,
+            "profile": profile,
+        }
+        return render(request, "lxd/profile_detail.html", context)
+    else:
+        return "404 - No profile with that name."  # TODO: Make sexier

@@ -21,4 +21,8 @@ urlpatterns = [
     path("networks/", views.list_networks, name="list_networks"),
     # /network/lxdbr0/
     path("network/<str:network_name>/", views.network_detail, name="network_detail"),
+    # /profiles/
+    path("profiles/", views.list_profiles, name="list_profiles"),
+    # /profile/default/
+    path("profile/<str:profile_name>/", views.profile_detail, name="profile_detail"),
 ]
