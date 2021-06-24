@@ -1,12 +1,12 @@
 {% extends 'lxd/base.html' %}
 
 {% block content %}
-Host info:
-<p>Firewall: {{ firewall }}</p>
-<p>Kernel: {{ kernel_version }}</p>
-<p>Server name: {{ server_name }}</p>
-<p>lxd version: {{ lxd_version }}</p>
-<p>OS name: {{ os_name }}</p>
-<p>Storage: {{ storage }}</p>
-<p>Storage version: {{ storage_version }}</p>
+<h2>Host info</h2>
+<p><strong>Firewall:</strong> {{ firewall }}</p>
+<p><strong>Kernel:</strong> {{ kernel_version }}</p>
+<p><strong>Server name:</strong> {{ server_name }}</p>
+<p><strong>lxd version:</strong> {{ lxd_version }}</p>
+<p><strong>OS name:</strong> {{ os_name }}</p>
+<p><strong>Storage:</strong> {{ storage }}</p>
+<p><strong>Storage version:</strong> {{ storage_version }}</p>
 {% endblock %}
