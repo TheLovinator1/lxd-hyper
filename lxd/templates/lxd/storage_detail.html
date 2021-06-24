@@ -2,17 +2,21 @@
 
 {% block content %}
 <h1>{{ storage.name }}</h1>
-<li>Driver: {{ storage.driver }}</li>
-<li>Size: {{ storage.config.size }}</li>
-<li>Soruce: {{ storage.config.source }}</li>
-<li>Dirty: {{ storage.dirty }}</li>
-<li>Description: {{ storage.config.description }}</li>
-
-{% if storage.driver == "zfs" %}
-<li>ZFS pool name: {{ storage.config.zfs.pool_name }}</li>
+<li><strong>Driver:</strong> {{ storage.driver }}</li>
+<li><strong>Size:</strong> {{ storage.config.size }}</li>
+<li><strong>Soruce:</strong> {{ storage.config.source }}</li>
+<li><strong>Dirty:</strong> {{ storage.dirty }}</li>
+{% if storage.config.description|length > 0 %}
+    <li><strong>Description:</strong> {{ storage.config.description }}</li>
+{% else %}
+    <li><strong>Description:</strong> None</li>
 {% endif %}
 
-<li>Volumes:</li>
+{% if storage.driver == "zfs" %}
+<li><strong>ZFS pool name:</strong> {{ storage.config.zfs.pool_name }}</li>
+{% endif %}
+
+<li><strong>Volumes:</strong></li>
 <ul>
     {% for volume in volumes %}
     <li><a href="{% url 'container_detail' volume.name %}"> {{ volume.name }}</a></li>
