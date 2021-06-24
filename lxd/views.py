@@ -33,6 +33,21 @@ def container_detail(request, container_name):
             context = {
                 "container_list": container_list,
                 "container": container,
+                "image_architecture": container.config['image.architecture'],
+                "image_description": container.config['image.description'],
+                "image_os": container.config['image.os'],
+                "image_release": container.config['image.release'],
+                "image_serial": container.config['image.serial'],
+                "image_type": container.config['image.type'],
+                "image_variant": container.config['image.variant'],
+                "volatile_base_image": container.config['volatile.base_image'],
+                "volatile_eth0_hwaddr": container.config['volatile.eth0.hwaddr'],
+                "volatile_idmap_base": container.config['volatile.idmap.base'],
+                "volatile_idmap_current": container.config['volatile.idmap.current'],
+                "volatile_idmap_next": container.config['volatile.idmap.next'],
+                "volatile_last_state_idmap": container.config['volatile.last_state.idmap'],
+                "volatile_last_state_power": container.config['volatile.last_state.power'],
+                "volatile_uuid": container.config['volatile.uuid'],
             }
             return render(request, "lxd/detail.html", context)
 
