@@ -3,10 +3,7 @@
 <html lang="en">
 
 <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <title>lxd-hyper</title>
 </head>
 
@@ -14,7 +11,7 @@
     <link rel="stylesheet" href="{% static 'css/style.css'%}">
 
     <!-- Navbar -->
-    <div class="navbar">
+    <div class="navbar-left">
         <a href="{% url 'index' %}">🏠 Home</a>
         <a href="{% url 'list_images' %}">💿 Images</a>
         <a href="{% url 'list_storage' %}">🛀 Storage pools</a>
@@ -23,15 +20,36 @@
         <a href="{% url 'list_projects' %}">📽 Projects</a>
         <a href="{% url 'list_certificates' %}">📜 Certificates</a>
         <a href="{% url 'about' %}">❓ About</a>
-    </div>
 
+    </div>
+    <div class="navbar-right">
+        {{ loadavg }} | {{ mem_used }} / {{ mem_total }} 🐏 | {{ disk_free }} ({{ disk_percent }}% free)💾
+
+    </div>
     <!-- Sidebar -->
     <div class="sidebar">
+        <a href="{% url 'create_instance' %}">
+            <h4>💦 Create new</h4>
+        </a>
+        <h4>Containers:</h4>
         {% if container_list %}
         {% for container in container_list %}
-        <a href="{% url 'container_detail' container.name %}"> {{ container.name }}
+        <a href="{% url 'container_detail' container.name %}">
             {% if container.status == "Stopped" %}🔴{% endif %}
             {% if container.status == "Running"%}🟢{% endif %}
+            {{ container.name }}
+        </a>
+        {% endfor %}
+        {% else %}
+        Found no containers.
+        {% endif %}
+
+        <h4>Virtual Machines:</h4>
+        {% if vm_list %}
+        {% for vm in vm_list %}
+        <a href="{% url 'container_detail' vm.name %}"> {{ vm.name }}
+            {% if vm.status == "Stopped" %}🔴{% endif %}
+            {% if vm.status == "Running"%}🟢{% endif %}
         </a>
         {% endfor %}
         {% else %}

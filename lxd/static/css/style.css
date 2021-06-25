@@ -6,26 +6,48 @@ body {
   margin: 0;
 }
 
-.navbar {
+.navbar-left {
   border-style: groove;
   height: 20px;
-  width: 100%;
+  width: 60%;
   position: fixed;
   z-index: 1;
   top: 0;
   left: 163px;
 }
 
-.navbar a {
+.navbar-left a {
   padding: 6px 8px 6px 16px;
   text-decoration: none;
   font-size: 14px;
   color: #000000;
 }
 
-.navbar a:hover {
+.navbar-left a:hover {
   color: #0099ff;
 }
+
+.navbar-right {
+  border-style: groove;
+  height: 20px;
+  width: 100%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 1317px;
+}
+
+.navbar-right a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 14px;
+  color: #000000;
+}
+
+.navbar-right a:hover {
+  color: #0099ff;
+}
+
 
 .sidebar {
   border-style: groove;
@@ -45,6 +67,9 @@ body {
   font-size: 14px;
   color: #000000;
   display: block;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .sidebar a:hover {
