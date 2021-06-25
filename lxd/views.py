@@ -1,18 +1,22 @@
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 from lxd.apps import client
 from django.shortcuts import render
+from lxd.forms import CreateInstanceForm
+from lxd.create_instance import create
+
 
 def index(request):
     container_list = client.containers.all()
     context = {
         "container_list": container_list,
-        "firewall": client.host_info['environment']['firewall'],
-        "kernel_version": client.host_info['environment']['kernel_version'],
-        "server_name": client.host_info['environment']['server_name'],
-        "lxd_version": client.host_info['environment']['server_version'],
-        "os_name": client.host_info['environment']['os_name'],
-        "storage": client.host_info['environment']['storage'],
-        "storage_version": client.host_info['environment']['storage_version'],
-
+        "firewall": client.host_info["environment"]["firewall"],
+        "kernel_version": client.host_info["environment"]["kernel_version"],
+        "server_name": client.host_info["environment"]["server_name"],
+        "lxd_version": client.host_info["environment"]["server_version"],
+        "os_name": client.host_info["environment"]["os_name"],
+        "storage": client.host_info["environment"]["storage"],
+        "storage_version": client.host_info["environment"]["storage_version"],
     }
     return render(request, "lxd/index.html", context)
 
@@ -33,21 +37,21 @@ def container_detail(request, container_name):
             context = {
                 "container_list": container_list,
                 "container": container,
-                "image_architecture": container.config['image.architecture'],
-                "image_description": container.config['image.description'],
-                "image_os": container.config['image.os'],
-                "image_release": container.config['image.release'],
-                "image_serial": container.config['image.serial'],
-                "image_type": container.config['image.type'],
-                "image_variant": container.config['image.variant'],
-                "volatile_base_image": container.config['volatile.base_image'],
-                "volatile_eth0_hwaddr": container.config['volatile.eth0.hwaddr'],
-                "volatile_idmap_base": container.config['volatile.idmap.base'],
-                "volatile_idmap_current": container.config['volatile.idmap.current'],
-                "volatile_idmap_next": container.config['volatile.idmap.next'],
-                "volatile_last_state_idmap": container.config['volatile.last_state.idmap'],
-                "volatile_last_state_power": container.config['volatile.last_state.power'],
-                "volatile_uuid": container.config['volatile.uuid'],
+                "image_architecture": container.config["image.architecture"],
+                "image_description": container.config["image.description"],
+                "image_os": container.config["image.os"],
+                "image_release": container.config["image.release"],
+                "image_serial": container.config["image.serial"],
+                "image_type": container.config["image.type"],
+                # "image_variant": container.config["image.variant"],
+                # "volatile_base_image": container.config["volatile.base_image"],
+                # "volatile_eth0_hwaddr": container.config["volatile.eth0.hwaddr"],
+                # "volatile_idmap_base": container.config["volatile.idmap.base"],
+                # "volatile_idmap_current": container.config["volatile.idmap.current"],
+                # "volatile_idmap_next": container.config["volatile.idmap.next"],
+                # "volatile_last_state_idmap": container.config["volatile.last_state.idmap"],
+                # "volatile_last_state_power": container.config["volatile.last_state.power"],
+                # "volatile_uuid": container.config["volatile.uuid"],
             }
             return render(request, "lxd/detail.html", context)
 
@@ -96,13 +100,16 @@ def network_detail(request, network_name):
                 "network": network,
             }
             if network.config:
-                if network.config['ipv4.address']:
-                    context["ipv4_address"] = network.config['ipv4.address']
-                if network.config['ipv4.nat']: 
-                    context["ipv4_nat"] = network.config['ipv4.nat']
-                if network.config['ipv6.address']:
-                    context["ipv6_address"] =  network.config['ipv6.address'] # TODO: Check if ipv6_nat exists
+                if network.config["ipv4.address"]:
+                    context["ipv4_address"] = network.config["ipv4.address"]
+                if network.config["ipv4.nat"]:
+                    context["ipv4_nat"] = network.config["ipv4.nat"]
+                if network.config["ipv6.address"]:
+                    context["ipv6_address"] = network.config[
+                        "ipv6.address"
+                    ]  # TODO: Check if ipv6_nat exists
             return render(request, "lxd/network_detail.html", context)
+
 
 def list_storage(request):
     container_list = client.containers.all()
@@ -131,6 +138,7 @@ def storage_detail(request, storage_name: str):
     else:
         return "404 - No storage pool with that name."  # TODO: Make sexier
 
+
 def list_profiles(request):
     container_list = client.containers.all()
     profiles_list = client.profiles.all()
@@ -155,6 +163,7 @@ def profile_detail(request, profile_name: str):
     else:
         return "404 - No profile with that name."  # TODO: Make sexier
 
+
 def list_projects(request):
     container_list = client.containers.all()
     projects_list = client.projects.all()
@@ -174,10 +183,10 @@ def project_detail(request, project_name: str):
             "container_list": container_list,
             "projects_list": projects_list,
             "project": project,
-            "features_images": project.config['features.images'],
-            "features_networks": project.config['features.networks'],
-            "features_profiles": project.config['features.profiles'],
-            "features_storage_volumes": project.config['features.storage.volumes'],
+            "features_images": project.config["features.images"],
+            "features_networks": project.config["features.networks"],
+            "features_profiles": project.config["features.profiles"],
+            "features_storage_volumes": project.config["features.storage.volumes"],
         }
         return render(request, "lxd/project_detail.html", context)
     else:
@@ -192,3 +201,37 @@ def list_certificates(request):
         "certificates_list": certificates_list,
     }
     return render(request, "lxd/certificates.html", context)
+
+
+def create_instance(request):
+    container_list = client.containers.all()
+
+    # If this is a POST request then process the Form data
+    if request.method == "POST":
+
+        # Create a form instance and populate it with data from the request (binding):
+        form = CreateInstanceForm(request.POST)
+
+        # Check if the form is valid:
+        if form.is_valid():
+            name = form.cleaned_data.get("name")
+            description = form.cleaned_data.get("description")
+            is_vm = form.cleaned_data.get("is_vm")
+
+            print(create(name, description, is_vm))
+
+            # redirect to a new URL:
+            # return render(request, "lxd/create_instance.html", {"form": form, "container_list": container_list})
+            return HttpResponseRedirect(
+                reverse("container_detail", kwargs={"container_name": name})
+            )
+
+    # If this is a GET (or any other method) create the default form.
+    else:
+        form = CreateInstanceForm()
+
+    context = {
+        "form": form,
+        "container_list": container_list,
+    }
+    return render(request, "lxd/create_instance.html", context)

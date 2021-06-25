@@ -8,7 +8,11 @@ urlpatterns = [
     # /about/
     path("about/", views.about, name="about"),
     # /container/neat-emu/
-    path("container/<str:container_name>/", views.container_detail, name="container_detail"),
+    path(
+        "container/<str:container_name>/",
+        views.container_detail,
+        name="container_detail",
+    ),
     # /images/
     path("images/", views.list_images, name="list_images"),
     # /image/ade188b16e5e719b73c14b5c19e7e65b8a15cf6f388be0bdb058012256b48a1e/
@@ -31,4 +35,6 @@ urlpatterns = [
     path("project/<str:project_name>/", views.project_detail, name="project_detail"),
     # /certificates/
     path("certificates/", views.list_certificates, name="list_certificates"),
+    # /create_instance/
+    path("create_instance/", views.create_instance, name="create_instance"),
 ]
