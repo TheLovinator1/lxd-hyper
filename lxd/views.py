@@ -7,9 +7,8 @@ from lxd.create_instance import create
 
 
 def index(request):
-    container_list = client.containers.all()
+
     context = {
-        "container_list": container_list,
         "firewall": client.host_info["environment"]["firewall"],
         "kernel_version": client.host_info["environment"]["kernel_version"],
         "server_name": client.host_info["environment"]["server_name"],
@@ -22,10 +21,8 @@ def index(request):
 
 
 def about(request):
-    container_list = client.containers.all()
-    context = {
-        "container_list": container_list,
-    }
+
+    context = {}
     return render(request, "lxd/about.html", context)
 
 
@@ -35,7 +32,6 @@ def container_detail(request, container_name):
     for container in container_list:
         if container.name == container_name:
             context = {
-                "container_list": container_list,
                 "container": container,
                 "image_architecture": container.config["image.architecture"],
                 "image_description": container.config["image.description"],
@@ -43,24 +39,14 @@ def container_detail(request, container_name):
                 "image_release": container.config["image.release"],
                 "image_serial": container.config["image.serial"],
                 "image_type": container.config["image.type"],
-                # "image_variant": container.config["image.variant"],
-                # "volatile_base_image": container.config["volatile.base_image"],
-                # "volatile_eth0_hwaddr": container.config["volatile.eth0.hwaddr"],
-                # "volatile_idmap_base": container.config["volatile.idmap.base"],
-                # "volatile_idmap_current": container.config["volatile.idmap.current"],
-                # "volatile_idmap_next": container.config["volatile.idmap.next"],
-                # "volatile_last_state_idmap": container.config["volatile.last_state.idmap"],
-                # "volatile_last_state_power": container.config["volatile.last_state.power"],
-                # "volatile_uuid": container.config["volatile.uuid"],
             }
             return render(request, "lxd/detail.html", context)
 
 
 def list_images(request):
     images_list = client.images.all()
-    container_list = client.containers.all()
+
     context = {
-        "container_list": container_list,
         "images_list": images_list,
     }
     return render(request, "lxd/images.html", context)
@@ -68,12 +54,11 @@ def list_images(request):
 
 def image_detail(request, image_fingerprint):
     # FIXME: Add support for 404
-    container_list = client.containers.all()
     image_list = client.images.all()
+
     for image in image_list:
         if image.fingerprint == image_fingerprint:
             context = {
-                "container_list": container_list,
                 "image": image,
             }
             return render(request, "lxd/image_detail.html", context)
@@ -81,9 +66,7 @@ def image_detail(request, image_fingerprint):
 
 def list_networks(request):
     networks_list = client.networks.all()
-    container_list = client.containers.all()
     context = {
-        "container_list": container_list,
         "networks_list": networks_list,
     }
     return render(request, "lxd/networks.html", context)
@@ -91,12 +74,11 @@ def list_networks(request):
 
 def network_detail(request, network_name):
     # FIXME: Add support for 404
-    container_list = client.containers.all()
     networks_list = client.networks.all()
+
     for network in networks_list:
         if network.name == network_name:
             context = {
-                "container_list": container_list,
                 "network": network,
             }
             if network.config:
@@ -112,10 +94,8 @@ def network_detail(request, network_name):
 
 
 def list_storage(request):
-    container_list = client.containers.all()
     storage_pools = client.storage_pools.all()
     context = {
-        "container_list": container_list,
         "storage_pools": storage_pools,
     }
     return render(request, "lxd/storage.html", context)
@@ -123,13 +103,12 @@ def list_storage(request):
 
 def storage_detail(request, storage_name: str):
     # TODO: Add zfs.pool_name
-    container_list = client.containers.all()
     storage_pools = client.storage_pools.all()
+
     if client.storage_pools.exists(storage_name):
         storage = client.storage_pools.get(storage_name)
         volumes = storage.volumes.all()
         context = {
-            "container_list": container_list,
             "storage_pools": storage_pools,
             "volumes": volumes,
             "storage": storage,
@@ -140,22 +119,19 @@ def storage_detail(request, storage_name: str):
 
 
 def list_profiles(request):
-    container_list = client.containers.all()
     profiles_list = client.profiles.all()
     context = {
-        "container_list": container_list,
         "profiles_list": profiles_list,
     }
     return render(request, "lxd/profiles.html", context)
 
 
 def profile_detail(request, profile_name: str):
-    container_list = client.containers.all()
     profiles_list = client.profiles.all()
+
     if client.profiles.exists(profile_name):
         profile = client.profiles.get(profile_name)
         context = {
-            "container_list": container_list,
             "profiles_list": profiles_list,
             "profile": profile,
         }
@@ -165,22 +141,19 @@ def profile_detail(request, profile_name: str):
 
 
 def list_projects(request):
-    container_list = client.containers.all()
     projects_list = client.projects.all()
     context = {
-        "container_list": container_list,
         "projects_list": projects_list,
     }
     return render(request, "lxd/projects.html", context)
 
 
 def project_detail(request, project_name: str):
-    container_list = client.containers.all()
     projects_list = client.projects.all()
+
     if client.projects.exists(project_name):
         project = client.projects.get(project_name)
         context = {
-            "container_list": container_list,
             "projects_list": projects_list,
             "project": project,
             "features_images": project.config["features.images"],
@@ -194,25 +167,17 @@ def project_detail(request, project_name: str):
 
 
 def list_certificates(request):
-    container_list = client.containers.all()
     certificates_list = client.certificates.all()
     context = {
-        "container_list": container_list,
         "certificates_list": certificates_list,
     }
     return render(request, "lxd/certificates.html", context)
 
 
 def create_instance(request):
-    container_list = client.containers.all()
-
-    # If this is a POST request then process the Form data
     if request.method == "POST":
-
-        # Create a form instance and populate it with data from the request (binding):
         form = CreateInstanceForm(request.POST)
 
-        # Check if the form is valid:
         if form.is_valid():
             name = form.cleaned_data.get("name")
             description = form.cleaned_data.get("description")
@@ -220,18 +185,12 @@ def create_instance(request):
 
             print(create(name, description, is_vm))
 
-            # redirect to a new URL:
-            # return render(request, "lxd/create_instance.html", {"form": form, "container_list": container_list})
             return HttpResponseRedirect(
-                reverse("container_detail", kwargs={"container_name": name})
+                reverse(
+                    "container_detail", kwargs={"container_name": name}
+                )  # FIXME: This does not work with auto generated names
             )
-
-    # If this is a GET (or any other method) create the default form.
     else:
         form = CreateInstanceForm()
 
-    context = {
-        "form": form,
-        "container_list": container_list,
-    }
-    return render(request, "lxd/create_instance.html", context)
+    return render(request, "lxd/create_instance.html", {"form": form})
