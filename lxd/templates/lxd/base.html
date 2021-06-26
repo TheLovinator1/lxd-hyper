@@ -47,9 +47,10 @@
         <h4>Virtual Machines:</h4>
         {% if vm_list %}
         {% for vm in vm_list %}
-        <a href="{% url 'container_detail' vm.name %}"> {{ vm.name }}
+        <a href="{% url 'vm_detail' vm.name %}">
             {% if vm.status == "Stopped" %}🔴{% endif %}
             {% if vm.status == "Running"%}🟢{% endif %}
+            {{ vm.name }}
         </a>
         {% endfor %}
         {% else %}

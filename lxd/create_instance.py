@@ -8,12 +8,6 @@ def create(name, description, is_vm):
         vm_or_container = "container"
 
     config = {
-        "architecture": "",
-        "config": {},
-        "devices": {},
-        "ephemeral": False,
-        "profiles": None,
-        "stateful": False,
         "description": f"{description}",
         "name": f"{name}",
         "source": {
@@ -24,7 +18,6 @@ def create(name, description, is_vm):
             "protocol": "simplestreams",
             "mode": "pull",
         },
-        "instance_type": "",
         "type": f"{vm_or_container}",
     }
 

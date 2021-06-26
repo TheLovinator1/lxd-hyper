@@ -40,7 +40,24 @@ def container_detail(request, container_name):
                 "image_serial": container.config["image.serial"],
                 "image_type": container.config["image.type"],
             }
-            return render(request, "lxd/detail.html", context)
+            return render(request, "lxd/container_detail.html", context)
+
+
+def vm_detail(request, vm_name):
+    # FIXME: Add support for 404
+    vm_list = client.virtual_machines.all()
+    for vm in vm_list:
+        if vm.name == vm_name:
+            context = {
+                "vm": vm,
+                "image_architecture": vm.config["image.architecture"],
+                "image_description": vm.config["image.description"],
+                "image_os": vm.config["image.os"],
+                "image_release": vm.config["image.release"],
+                "image_serial": vm.config["image.serial"],
+                "image_type": vm.config["image.type"],
+            }
+            return render(request, "lxd/vm_detail.html", context)
 
 
 def list_images(request):
@@ -175,6 +192,8 @@ def list_certificates(request):
 
 
 def create_instance(request):
+    images_list = client.images.all()
+
     if request.method == "POST":
         form = CreateInstanceForm(request.POST)
 
@@ -183,14 +202,25 @@ def create_instance(request):
             description = form.cleaned_data.get("description")
             is_vm = form.cleaned_data.get("is_vm")
 
-            print(create(name, description, is_vm))
-
-            return HttpResponseRedirect(
-                reverse(
-                    "container_detail", kwargs={"container_name": name}
-                )  # FIXME: This does not work with auto generated names
-            )
+            create(name, description, is_vm)
+            if is_vm:
+                return HttpResponseRedirect(
+                    reverse(
+                        "vm_detail", kwargs={"vm_name": name}
+                    )  # FIXME: This does not work with auto generated names
+                )
+            else:
+                return HttpResponseRedirect(
+                    reverse(
+                        "container_detail", kwargs={"container_name": name}
+                    )  # FIXME: This does not work with auto generated names
+                )
     else:
         form = CreateInstanceForm()
 
-    return render(request, "lxd/create_instance.html", {"form": form})
+    context = {
+        "images_list": images_list,
+        "form": form,
+    }
+
+    return render(request, "lxd/create_instance.html", context)

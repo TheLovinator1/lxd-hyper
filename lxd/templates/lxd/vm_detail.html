@@ -1,0 +1,16 @@
+{% extends 'lxd/base.html' %}
+
+{% block content %}
+<h1>{{ vm.name }}</h1>
+<li><strong>Architecture:</strong> {{ vm.architecture }}</li>
+<li><strong>Status:</strong> {{ vm.status }}</li>
+<li><strong>Description:</strong> {{ vm.description }}</li>
+<li><strong>Created at:</strong> {{ vm.created_at }}</li>
+
+<li><strong>Image architecture:</strong> {{ image_architecture }}</li>
+<li><strong>Image description:</strong> {{ image_description }}</li>
+<li><strong>Image os:</strong> {{ image_os }}</li>
+<li><strong>Image release:</strong> {{ image_release }}</li>
+<li><strong>Image serial:</strong> {{ image_serial }}</li>
+<li><strong>Image type:</strong> {{ image_type }}</li>
+{% endblock %}
