@@ -42,7 +42,6 @@ def container_detail(request, container_name):
 
 def instance_start(request, container_name):
     instance = client.instances.get(container_name)
-    if instance.state == "running":
     if instance.state == "Running":
         print(f"{container_name} is already running")
     else:
@@ -53,7 +52,6 @@ def instance_start(request, container_name):
 
 def instance_stop(request, container_name):
     instance = client.instances.get(container_name)
-    if instance.state == "stopped":
     if instance.state == "Stopped":
         print(f"{container_name} is already stopped")
     else:
@@ -70,13 +68,21 @@ def instance_restart(request, container_name):
     return redirect("container_detail", container_name)
 
 
-def instance_suspend(request, container_name):
+def instance_freeze(request, container_name):
     instance = client.instances.get(container_name)
     if instance.state == "Frozen":
-        print(f"{container_name} is already suspended")
+        print(f"{container_name} is already freezing")
 
-    print(f"Suspending {container_name}")
+    print(f"Freezing {container_name}")
     instance.freeze()
+
+    return redirect("container_detail", container_name)
+
+
+def instance_unfreeze(request, container_name):
+    instance = client.instances.get(container_name)
+    print(f"Unfreezing {container_name}")
+    instance.unfreeze()
 
     return redirect("container_detail", container_name)
 

@@ -37,6 +37,7 @@
         <a href="{% url 'container_detail' container.name %}">
             {% if container.status == "Stopped" %}🔴{% endif %}
             {% if container.status == "Running"%}🟢{% endif %}
+            {% if container.status == "Frozen"%}⛄{% endif %}
             {{ container.name }}
         </a>
         {% endfor %}
