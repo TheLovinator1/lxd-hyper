@@ -49,6 +49,16 @@ def instance_start(request, container_name):
         instance.start()
     return redirect("container_detail", container_name)
 
+
+def instance_stop(request, container_name):
+    instance = client.instances.get(container_name)
+    if instance.state == "stopped":
+        print(f"{container_name} is already stopped")
+    else:
+        print(f"Stopping {container_name}")
+        instance.stop()
+    return redirect("container_detail", container_name)
+
 def vm_detail(request, vm_name):
     # FIXME: Add support for 404
     vm_list = client.virtual_machines.all()
