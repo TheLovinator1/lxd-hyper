@@ -123,4 +123,10 @@ urlpatterns = [
         views.instance_restart,
         name="instance_restart",
     ),
+    # /container/neat-emu/suspend
+    path(
+        "container/<str:container_name>/suspend/",
+        views.instance_suspend,
+        name="instance_suspend",
+    ),
 ]
