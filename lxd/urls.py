@@ -105,4 +105,10 @@ urlpatterns = [
         views.create_network,
         name="create_network",
     ),
+    # /container/neat-emu/start
+    path(
+        "container/<str:container_name>/start/",
+        views.instance_start,
+        name="instance_start",
+    ),
 ]

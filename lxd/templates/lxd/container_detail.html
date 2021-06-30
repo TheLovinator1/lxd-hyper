@@ -2,6 +2,9 @@
 
 {% block content %}
 <h1>{{ container.name }}</h1>
+
+<a href="{% url 'instance_start' container_name=container.name %}">Start</a>
+
 <li><strong>Architecture:</strong> {{ container.architecture }}</li>
 <li><strong>Status:</strong> {{ container.status }}</li>
 <li><strong>Description:</strong> {{ container.description }}</li>

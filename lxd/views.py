@@ -1,7 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from lxd.apps import client
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from lxd.forms import CreateInstanceForm, CreateNetworkForm
 
 
@@ -39,6 +39,15 @@ def container_detail(request, container_name):
             }
             return render(request, "lxd/container_detail.html", context)
 
+
+def instance_start(request, container_name):
+    instance = client.instances.get(container_name)
+    if instance.state == "running":
+        print(f"{container_name} is already running")
+    else:
+        print(f"Starting {container_name}")
+        instance.start()
+    return redirect("container_detail", container_name)
 
 def vm_detail(request, vm_name):
     # FIXME: Add support for 404
@@ -189,6 +198,14 @@ def list_certificates(request):
 
 
 def create_instance(request):
+    # TODO: Add validation for:
+
+    # Valid instance names must:
+    # Be between 1 and 63 characters long
+    # Be made up exclusively of letters, numbers and dashes from the ASCII table
+    # Not start with a digit or a dash
+    # Not end with a dash
+
     images_list = client.images.all()
 
     if request.method == "POST":
