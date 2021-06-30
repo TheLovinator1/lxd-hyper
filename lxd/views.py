@@ -59,6 +59,15 @@ def instance_stop(request, container_name):
         instance.stop()
     return redirect("container_detail", container_name)
 
+
+def instance_restart(request, container_name):
+    instance = client.instances.get(container_name)
+    print(f"Restarting {container_name}")
+    instance.restart()
+
+    return redirect("container_detail", container_name)
+
+
 def vm_detail(request, vm_name):
     # FIXME: Add support for 404
     vm_list = client.virtual_machines.all()

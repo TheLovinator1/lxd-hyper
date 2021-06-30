@@ -117,4 +117,10 @@ urlpatterns = [
         views.instance_stop,
         name="instance_stop",
     ),
+    # /container/neat-emu/restart
+    path(
+        "container/<str:container_name>/restart/",
+        views.instance_restart,
+        name="instance_restart",
+    ),
 ]

@@ -5,6 +5,7 @@
 
 <a href="{% url 'instance_start' container_name=container.name %}">Start</a>
 <a href="{% url 'instance_stop' container_name=container.name %}">Stop</a>
+<a href="{% url 'instance_restart' container_name=container.name %}">Restart</a>
 
 <li><strong>Architecture:</strong> {{ container.architecture }}</li>
 <li><strong>Status:</strong> {{ container.status }}</li>
