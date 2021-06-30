@@ -99,4 +99,10 @@ urlpatterns = [
         views.create_instance,
         name="create_instance",
     ),
+    # /create_network/
+    path(
+        "create_network/",
+        views.create_network,
+        name="create_network",
+    ),
 ]

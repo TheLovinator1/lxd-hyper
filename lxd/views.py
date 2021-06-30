@@ -2,12 +2,10 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from lxd.apps import client
 from django.shortcuts import render
-from lxd.forms import CreateInstanceForm
-from lxd.create_instance import create
+from lxd.forms import CreateInstanceForm, CreateNetworkForm
 
 
 def index(request):
-
     context = {
         "firewall": client.host_info["environment"]["firewall"],
         "kernel_version": client.host_info["environment"]["kernel_version"],
@@ -21,7 +19,6 @@ def index(request):
 
 
 def about(request):
-
     context = {}
     return render(request, "lxd/about.html", context)
 
@@ -119,7 +116,7 @@ def list_storage(request):
 
 
 def storage_detail(request, storage_name: str):
-    # TODO: Add zfs.pool_name
+    # TODO: Add zfs, btrfs things
     storage_pools = client.storage_pools.all()
 
     if client.storage_pools.exists(storage_name):
@@ -202,7 +199,27 @@ def create_instance(request):
             description = form.cleaned_data.get("description")
             is_vm = form.cleaned_data.get("is_vm")
 
-            create(name, description, is_vm)
+            if is_vm:
+                vm_or_container = "virtual-machine"
+            else:
+                vm_or_container = "container"
+
+            config = {
+                "description": f"{description}",
+                "name": f"{name}",
+                "source": {
+                    "type": "image",
+                    "certificate": "",
+                    "alias": "20.04",
+                    "server": "https://cloud-images.ubuntu.com/releases",
+                    "protocol": "simplestreams",
+                    "mode": "pull",
+                },
+                "type": f"{vm_or_container}",
+            }
+
+            client.instances.create(config, wait=True)
+
             if is_vm:
                 return HttpResponseRedirect(
                     reverse(
@@ -224,3 +241,26 @@ def create_instance(request):
     }
 
     return render(request, "lxd/create_instance.html", context)
+
+
+def create_network(request):
+    # FIXME: Error: Failed clearing firewall: Failed clearing nftables rules for network "plsremove": EOF
+    if request.method == "POST":
+        form = CreateNetworkForm(request.POST)
+
+        if form.is_valid():
+            client.networks.create(
+                form.cleaned_data.get("name"),
+                description=form.cleaned_data.get("description"),
+                type=form.cleaned_data.get("network_type"),
+                config={},
+            )
+
+    else:
+        form = CreateNetworkForm()
+
+    return render(
+        request,
+        "lxd/network_create.html",
+        {"form": form},
+    )

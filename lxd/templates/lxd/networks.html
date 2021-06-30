@@ -1,6 +1,8 @@
 {% extends 'lxd/base.html' %}
 
 {% block content %}
+<a href="{% url 'create_network' %}">Create new network</a>
+
 {% if networks_list %}
 <ul>
     {% for network in networks_list %}
