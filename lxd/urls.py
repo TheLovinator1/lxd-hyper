@@ -123,16 +123,16 @@ urlpatterns = [
         views.instance_restart,
         name="instance_restart",
     ),
-    # /container/neat-emu/freeze
+    # /container/neat-emu/suspend
     path(
-        "container/<str:container_name>/freeze/",
-        views.instance_freeze,
-        name="instance_freeze",
+        "container/<str:container_name>/suspend/",
+        views.instance_suspend,
+        name="instance_suspend",
     ),
-    # /container/neat-emu/unfreeze
+    # /container/neat-emu/resume
     path(
-        "container/<str:container_name>/unfreeze/",
-        views.instance_unfreeze,
-        name="instance_unfreeze",
+        "container/<str:container_name>/resume/",
+        views.instance_resume,
+        name="instance_resume",
     ),
 ]

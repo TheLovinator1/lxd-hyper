@@ -6,8 +6,8 @@
 <a href="{% url 'instance_start' container_name=container.name %}">Start</a>
 <a href="{% url 'instance_stop' container_name=container.name %}">Stop</a>
 <a href="{% url 'instance_restart' container_name=container.name %}">Restart</a>
-<a href="{% url 'instance_freeze' container_name=container.name %}">Freeze</a>
-<a href="{% url 'instance_unfreeze' container_name=container.name %}">Unfreeze</a>
+<a href="{% url 'instance_suspend' container_name=container.name %}">Suspend</a>
+<a href="{% url 'instance_resume' container_name=container.name %}">Resume</a>
 
 <li><strong>Architecture:</strong> {{ container.architecture }}</li>
 <li><strong>Status:</strong> {{ container.status }}</li>
