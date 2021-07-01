@@ -28,6 +28,8 @@
         <li><strong>Image type:</strong> {{ image_type }}</li>
     </ul>
 
+
+    {% if container.status == "Running"%}
     <strong>Memory:</strong>
     <ul>
         {% if memory_usage %}
@@ -43,6 +45,68 @@
         <li><strong>Swap usage peak:</strong> {{ memory_swap_usage_peak }}</li>
         {% endif %}
     </ul>
+
+    <strong>Network:</strong>
+
+    <ul>
+        {% if network_ipv4_address %}
+        <li><strong>IPv4 Address:</strong> {{ network_ipv4_address }}</li>
+        {% endif %}
+        {% if network_ipv4_netmask %}
+        <li><strong>IPv4 Netmask:</strong> {{ network_ipv4_netmask }}</li>
+        {% endif %}
+        {% if network_ipv4_scope %}
+        <li><strong>IPv4 Scope:</strong> {{ network_ipv4_scope }}</li>
+        {% endif %}
+        {% if network_ipv6_address %}
+        <li><strong>IPv6 Address:</strong> {{ network_ipv6_address }}</li>
+        {% endif %}
+        {% if network_ipv6_netmask %}
+        <li><strong>IPv6 Netmask:</strong> {{ network_ipv6_netmask }}</li>
+        {% endif %}
+        {% if network_ipv6_netmask %}
+        <li><strong>IPv6 Scope:</strong> {{ network_ipv6_scope }}</li>
+        {% endif %}
+        {% if network_bytes_received %}
+        <li><strong>Received:</strong> {{ network_bytes_received }}</li>
+        {% endif %}
+        {% if network_bytes_sent %}
+        <li><strong>Sent:</strong> {{ network_bytes_sent }}</li>
+        {% endif %}
+        {% if network_packets_received %}
+        <li><strong>Packets recieved:</strong> {{ network_packets_received }}</li>
+        {% endif %}
+        {% if network_packets_sent %}
+        <li><strong>Packets sent:</strong> {{ network_packets_sent }}</li>
+        {% endif %}
+        {% if network_hwaddr %}
+        <li><strong>HWaddr:</strong> {{ network_hwaddr }}</li>
+        {% endif %}
+        {% if network_host_name %}
+        <li><strong>Host name:</strong> {{ network_host_name }}</li>
+        {% endif %}
+        {% if network_mtu %}
+        <li><strong>MTU:</strong> {{ network_mtu }}</li>
+        {% endif %}
+        {% if network_state %}
+        <li><strong>State:</strong> {{ network_state }}</li>
+        {% endif %}
+        {% if network_type %}
+        <li><strong>Type:</strong> {{ network_type }}</li>
+        {% endif %}
+    </ul>
+    {% else %}
+    <i>Fun fact: container needs to be running to see network information</i>
+    {% endif %}
+
+    {% if root_disk_usage %}
+    <li><strong>Root disk usage:</strong> {{ root_disk_usage }}</li>
+    {% endif %}
+
+
+    {% if cpu_usage %}
+    <li><strong>CPU usage:</strong> {{ cpu_usage }}% (This is the server cpu usage, not the container.)</li>
+    {% endif %}
 
 </ul>
 {% endblock %}
