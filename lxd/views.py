@@ -3,6 +3,7 @@ from django.urls import reverse
 from lxd.apps import client
 from django.shortcuts import redirect, render
 from lxd.forms import CreateInstanceForm, CreateNetworkForm
+from lxd.bytes2human import bytes2human
 
 
 def index(request):
@@ -21,6 +22,7 @@ def index(request):
 def container_detail(request, container_name):
     # FIXME: Add support for 404
     container = client.containers.get(container_name)
+    state = container.state()
     context = {
         "container": container,
         "image_architecture": container.config["image.architecture"],
@@ -29,7 +31,12 @@ def container_detail(request, container_name):
         "image_release": container.config["image.release"],
         "image_serial": container.config["image.serial"],
         "image_type": container.config["image.type"],
+        "memory_usage": bytes2human(state.memory["usage"]),
+        "memory_usage_peak": bytes2human(state.memory["usage_peak"]),
+        "memory_swap_usage": bytes2human(state.memory["swap_usage"]),
+        "memory_swap_usage_peak": bytes2human(state.memory["swap_usage_peak"]),
     }
+
     return render(request, "lxd/container_detail.html", context)
 
 

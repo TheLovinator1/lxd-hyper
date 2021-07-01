@@ -8,20 +8,41 @@
 <a href="{% url 'instance_restart' container_name=container.name %}">Restart</a>
 <a href="{% url 'instance_suspend' container_name=container.name %}">Suspend</a>
 <a href="{% url 'instance_resume' container_name=container.name %}">Resume</a>
+<ul>
+    <li><strong>Architecture:</strong> {{ container.architecture }}</li>
+    <li><strong>Status:</strong> {{ container.status }}</li>
+    {% if container.description|length > 0 %}
+    <li><strong>Description:</strong> {{ container.description }}</li>
+    {% else %}
+    <li><strong>Description:</strong> None</li>
+    {% endif %}
+    <li><strong>Created at:</strong> {{ container.created_at }}</li>
 
-<li><strong>Architecture:</strong> {{ container.architecture }}</li>
-<li><strong>Status:</strong> {{ container.status }}</li>
-{% if container.description|length > 0 %}
-<li><strong>Description:</strong> {{ container.description }}</li>
-{% else %}
-<li><strong>Description:</strong> None</li>
-{% endif %}
-<li><strong>Created at:</strong> {{ container.created_at }}</li>
+    <strong>Image:</strong>
+    <ul>
+        <li><strong>Image architecture:</strong> {{ image_architecture }}</li>
+        <li><strong>Image description:</strong> {{ image_description }}</li>
+        <li><strong>Image os:</strong> {{ image_os }}</li>
+        <li><strong>Image release:</strong> {{ image_release }}</li>
+        <li><strong>Image serial:</strong> {{ image_serial }}</li>
+        <li><strong>Image type:</strong> {{ image_type }}</li>
+    </ul>
 
-<li><strong>Image architecture:</strong> {{ image_architecture }}</li>
-<li><strong>Image description:</strong> {{ image_description }}</li>
-<li><strong>Image os:</strong> {{ image_os }}</li>
-<li><strong>Image release:</strong> {{ image_release }}</li>
-<li><strong>Image serial:</strong> {{ image_serial }}</li>
-<li><strong>Image type:</strong> {{ image_type }}</li>
+    <strong>Memory:</strong>
+    <ul>
+        {% if memory_usage %}
+        <li><strong>Memory usage:</strong> {{ memory_usage }}</li>
+        {% endif %}
+        {% if memory_usage_peak %}
+        <li><strong>Memory usage peak:</strong> {{ memory_usage_peak }}</li>
+        {% endif %}
+        {% if memory_swap_usage %}
+        <li><strong>Swap usage:</strong> {{ memory_swap_usage }}</li>
+        {% endif %}
+        {% if memory_swap_usage_peak %}
+        <li><strong>Swap usage peak:</strong> {{ memory_swap_usage_peak }}</li>
+        {% endif %}
+    </ul>
+
+</ul>
 {% endblock %}
