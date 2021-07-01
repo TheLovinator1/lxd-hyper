@@ -11,7 +11,11 @@
 
 <li><strong>Architecture:</strong> {{ container.architecture }}</li>
 <li><strong>Status:</strong> {{ container.status }}</li>
+{% if container.description|length > 0 %}
 <li><strong>Description:</strong> {{ container.description }}</li>
+{% else %}
+<li><strong>Description:</strong> None</li>
+{% endif %}
 <li><strong>Created at:</strong> {{ container.created_at }}</li>
 
 <li><strong>Image architecture:</strong> {{ image_architecture }}</li>

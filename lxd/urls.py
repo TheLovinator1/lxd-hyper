@@ -9,12 +9,6 @@ urlpatterns = [
         views.index,
         name="index",
     ),
-    # /about/
-    path(
-        "about/",
-        views.about,
-        name="about",
-    ),
     # /container/neat-emu/
     path(
         "container/<str:container_name>/",
