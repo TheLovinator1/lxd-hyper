@@ -39,22 +39,26 @@ def container_detail(request, container_name):
         "cpu_usage": state.cpu["usage"],
     }
     if container.status == "Running":
-        context["network_ipv4_address"] = state.network["eth0"]["addresses"][0]["address"]
-        context["network_ipv4_netmask"] = state.network["eth0"]["addresses"][0]["netmask"]
-        context["network_ipv4_scope"] = state.network["eth0"]["addresses"][0]["scope"]
-        context["network_ipv6_address"] = state.network["eth0"]["addresses"][1]["address"]
-        context["network_ipv6_netmask"] = state.network["eth0"]["addresses"][1]["netmask"]
-        context["network_ipv6_scope"] = state.network["eth0"]["addresses"][1]["scope"]
-        context["network_bytes_received"] = bytes2human(state.network["eth0"]["counters"]["bytes_received"])
-        context["network_bytes_sent"] = bytes2human(state.network["eth0"]["counters"]["bytes_sent"])
-        context["network_packets_received"] = state.network["eth0"]["counters"]["packets_received"]
-        context["network_packets_sent"] = state.network["eth0"]["counters"]["packets_sent"]
-        context["network_hwaddr"] = state.network["eth0"]["hwaddr"]
-        context["network_host_name"] = state.network["eth0"]["host_name"]
-        context["network_mtu"] = state.network["eth0"]["mtu"]
-        context["network_state"] = state.network["eth0"]["state"]
-        context["network_type"] = state.network["eth0"]["type"]
+        add_extra_context_if_running(context, state)
     return render(request, "lxd/container_detail.html", context)
+
+
+def add_extra_context_if_running(context, state):
+    context["network_ipv4_address"] = state.network["eth0"]["addresses"][0]["address"]
+    context["network_ipv4_netmask"] = state.network["eth0"]["addresses"][0]["netmask"]
+    context["network_ipv4_scope"] = state.network["eth0"]["addresses"][0]["scope"]
+    context["network_ipv6_address"] = state.network["eth0"]["addresses"][1]["address"]
+    context["network_ipv6_netmask"] = state.network["eth0"]["addresses"][1]["netmask"]
+    context["network_ipv6_scope"] = state.network["eth0"]["addresses"][1]["scope"]
+    context["network_bytes_received"] = bytes2human(state.network["eth0"]["counters"]["bytes_received"])
+    context["network_bytes_sent"] = bytes2human(state.network["eth0"]["counters"]["bytes_sent"])
+    context["network_packets_received"] = state.network["eth0"]["counters"]["packets_received"]
+    context["network_packets_sent"] = state.network["eth0"]["counters"]["packets_sent"]
+    context["network_hwaddr"] = state.network["eth0"]["hwaddr"]
+    context["network_host_name"] = state.network["eth0"]["host_name"]
+    context["network_mtu"] = state.network["eth0"]["mtu"]
+    context["network_state"] = state.network["eth0"]["state"]
+    context["network_type"] = state.network["eth0"]["type"]
 
 
 def instance_start(request, container_name):
