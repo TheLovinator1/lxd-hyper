@@ -248,11 +248,7 @@ def create_instance(request):
             description = form.cleaned_data.get("description")
             is_vm = form.cleaned_data.get("is_vm")
 
-            if is_vm:
-                vm_or_container = "virtual-machine"
-            else:
-                vm_or_container = "container"
-
+            vm_or_container = "virtual-machine" if is_vm else "container"
             config = {
                 "description": f"{description}",
                 "name": f"{name}",
