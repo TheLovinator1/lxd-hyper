@@ -38,7 +38,7 @@ def container_detail(request, container_name):
         "root_disk_usage": bytes2human(state.disk["root"]["usage"]),
         "cpu_usage": state.cpu["usage"],
     }
-    if container.state == "Running":
+    if container.status == "Running":
         context["network_ipv4_address"] = state.network["eth0"]["addresses"][0]["address"]
         context["network_ipv4_netmask"] = state.network["eth0"]["addresses"][0]["netmask"]
         context["network_ipv4_scope"] = state.network["eth0"]["addresses"][0]["scope"]

@@ -47,7 +47,6 @@
     </ul>
 
     <strong>Network:</strong>
-
     <ul>
         {% if network_ipv4_address %}
         <li><strong>IPv4 Address:</strong> {{ network_ipv4_address }}</li>
@@ -105,7 +104,7 @@
 
 
     {% if cpu_usage %}
-    <li><strong>CPU usage:</strong> {{ cpu_usage }}% (This is the server cpu usage, not the container.)</li>
+    <li><strong>CPU usage:</strong> {{ cpu_usage }}%</li>
     {% endif %}
 
 </ul>
