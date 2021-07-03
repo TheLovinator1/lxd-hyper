@@ -233,13 +233,6 @@ def list_certificates(request):
 
 
 def create_instance(request):
-    # TODO: Add validation for:
-
-    # Valid instance names must:
-    # Be between 1 and 63 characters long
-    # Be made up exclusively of letters, numbers and dashes from the ASCII table
-    # Not start with a digit or a dash
-    # Not end with a dash
     if request.method == "POST":
         form = CreateInstanceForm(request.POST)
 

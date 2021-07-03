@@ -1,4 +1,5 @@
 from django import forms
+from django.core.validators import RegexValidator
 
 # TODO: Make this find containers automatically
 # TODO: Add arm64, armhf, armel, i386, ppc64el and s390x
@@ -63,10 +64,21 @@ class CreateInstanceForm(forms.Form):
 
     name = forms.CharField(
         label="Name",
-        max_length=100,
+        max_length=63,
         strip=True,
         required=False,
         help_text="The name of the container or VM.",
+        validators=[
+            RegexValidator("^[a-zA-Z0-9-]*$", message="Only letters, numbers and dashes are allowed"),
+            RegexValidator("^[\d-]", message="Name can't start with a digit or a dash", inverse_match=True),
+            RegexValidator("-$", message="Name can't end with a dash", inverse_match=True),
+        ],
+    )
+    image = forms.CharField(
+        label="Image",
+        widget=forms.Select(choices=IMAGES_amd64),
+        required=True,
+        help_text="/cloud images has the lxd-agent installed out-of-the-box.",
     )
     description = forms.CharField(
         widget=forms.Textarea,
