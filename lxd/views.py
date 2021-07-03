@@ -246,6 +246,7 @@ def create_instance(request):
         if form.is_valid():
             name = form.cleaned_data.get("name")
             description = form.cleaned_data.get("description")
+            image_alias = form.cleaned_data.get("image")
             is_vm = form.cleaned_data.get("is_vm")
 
             vm_or_container = "virtual-machine" if is_vm else "container"
@@ -254,9 +255,8 @@ def create_instance(request):
                 "name": f"{name}",
                 "source": {
                     "type": "image",
-                    "certificate": "",
-                    "alias": "20.04",
-                    "server": "https://cloud-images.ubuntu.com/releases",
+                    "alias": f"{image_alias}",
+                    "server": "https://images.linuxcontainers.org",
                     "protocol": "simplestreams",
                     "mode": "pull",
                 },
