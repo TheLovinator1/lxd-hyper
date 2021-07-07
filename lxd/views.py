@@ -19,6 +19,12 @@ def index(request):
     return render(request, "lxd/index.html", context)
 
 
+def tips(request):
+    # TODO: Add dynamic bridge ip
+    # TODO Add clippy if check can be applied
+    return render(request, "lxd/tips.html")
+
+
 def container_detail(request, container_name):
     # FIXME: Add support for 404
     container = client.containers.get(container_name)

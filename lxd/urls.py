@@ -9,6 +9,12 @@ urlpatterns = [
         views.index,
         name="index",
     ),
+    # /tips
+    path(
+        "tips",
+        views.tips,
+        name="tips",
+    ),
     # /container/neat-emu/
     path(
         "container/<str:container_name>/",
