@@ -1,0 +1,46 @@
+[tool.poetry]
+name = "ldx-hyper"
+version = "0.1.0"
+description = "A free and open-source virtualization management platform"
+authors = ["Joakim Hellsén <tlovinator@gmail.com>"]
+license = "GPL-3.0-or-later"
+readme = "README.md"
+homepage = "https://github.com/TheLovinator1/lxd-hyper"
+repository = "https://github.com/TheLovinator1/lxd-hyper"
+packages = [{ include = "scripts", from = "." }]
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/TheLovinator1/lxd-hyper/issues"
+
+[tool.poetry.scripts]
+start = 'scripts.run_server:main'
+makemigrations = 'scripts.makemigrations:main'
+migrate = 'scripts.migrate:main'
+
+[tool.poetry.dependencies]
+python = "^3.9"
+Django = "^3.2.5"
+pylxd = "^2.3.0"
+psutil = "^5.8.0"
+
+[tool.poetry.dev-dependencies]
+black = "^21.6b0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 119
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+  | migrations
+)/
+'''
