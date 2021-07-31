@@ -1,5 +1,5 @@
 """
-ASGI config for lxdhyper project.
+ASGI config for lxd-hyper project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
