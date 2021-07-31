@@ -1,12 +1,20 @@
 from django.http import HttpResponseRedirect
-from django.urls import reverse
-from lxd.apps import client
 from django.shortcuts import redirect, render
-from lxd.forms import CreateInstanceForm, CreateNetworkForm
+from django.urls import reverse
+
+from lxd.apps import client
 from lxd.bytes2human import bytes2human
+from lxd.forms import CreateInstanceForm, CreateNetworkForm
+
+# TODO: Disable virtual machine stuff if QEMU is not installed.
 
 
 def index(request):
+    """Index page.
+
+    Returns:
+        /index.html (or /)
+    """
     context = {
         "firewall": client.host_info["environment"]["firewall"],
         "kernel_version": client.host_info["environment"]["kernel_version"],
@@ -19,13 +27,12 @@ def index(request):
     return render(request, "lxd/index.html", context)
 
 
-def tips(request):
-    # TODO: Add dynamic bridge ip
-    # TODO Add clippy if check can be applied
-    return render(request, "lxd/tips.html")
-
-
 def container_detail(request, container_name):
+    """Details about containers.
+
+    Returns:
+        /container_detail.html (or /container/<str:container_name>/)
+    """
     # FIXME: Add support for 404
     container = client.containers.get(container_name)
     state = container.state()
@@ -41,7 +48,7 @@ def container_detail(request, container_name):
         "memory_usage_peak": bytes2human(state.memory["usage_peak"]),
         "memory_swap_usage": bytes2human(state.memory["swap_usage"]),
         "memory_swap_usage_peak": bytes2human(state.memory["swap_usage_peak"]),
-        "root_disk_usage": bytes2human(state.disk["root"]["usage"]),
+        # "root_disk_usage": bytes2human(state.disk["root"]["usage"]), #FIXME: Does not work with btrfs
         "cpu_usage": state.cpu["usage"],
     }
     if container.status == "Running":
@@ -50,6 +57,10 @@ def container_detail(request, container_name):
 
 
 def add_extra_context_if_running(context, state):
+    """Add extra context to container_detail page if the container is running.
+
+    This is information that can only be accessed when the container is live.
+    """
     context["network_ipv4_address"] = state.network["eth0"]["addresses"][0]["address"]
     context["network_ipv4_netmask"] = state.network["eth0"]["addresses"][0]["netmask"]
     context["network_ipv4_scope"] = state.network["eth0"]["addresses"][0]["scope"]
@@ -68,6 +79,7 @@ def add_extra_context_if_running(context, state):
 
 
 def instance_start(request, container_name):
+    """Check if the instance is running and if not, start it."""
     instance = client.instances.get(container_name)
     if instance.state == "Running":
         print(f"{container_name} is already running")
@@ -78,6 +90,7 @@ def instance_start(request, container_name):
 
 
 def instance_stop(request, container_name):
+    """Check if the instance is stopped and if not, stop it."""
     instance = client.instances.get(container_name)
     if instance.state == "Stopped":
         print(f"{container_name} is already stopped")
@@ -88,6 +101,7 @@ def instance_stop(request, container_name):
 
 
 def instance_restart(request, container_name):
+    """Restart if instance is running."""
     instance = client.instances.get(container_name)
     if instance.state == "Running":
         print(f"Restarting {container_name}")
@@ -99,6 +113,7 @@ def instance_restart(request, container_name):
 
 
 def instance_suspend(request, container_name):
+    """Suspend running instance. Also called freeze."""
     instance = client.instances.get(container_name)
     if instance.state != "Running":
         if instance.state == "Frozen":
@@ -113,6 +128,7 @@ def instance_suspend(request, container_name):
 
 
 def instance_resume(request, container_name):
+    """Resume instance if suspended. Also called unfreeze."""
     instance = client.instances.get(container_name)
     if instance.state != "Frozen":
         if instance.state == "Running":
@@ -125,7 +141,15 @@ def instance_resume(request, container_name):
         print("Instance needs to be suspended")
 
 
-def vm_detail(request, vm_name):
+def vm_detail(request, vm_name: str):
+    """Detail page for virtual machines.
+
+    Args:
+        vm_name (str): Virtual machine name.
+
+    Returns:
+        /vm_detail.html (or /vm/<str:vm_name>/)
+    """
     # FIXME: Add support for 404
     vm = client.virtual_machines.get(vm_name)
     context = {
@@ -141,28 +165,50 @@ def vm_detail(request, vm_name):
 
 
 def list_images(request):
+    """List downloaded images.
+
+    Returns:
+        /images.html (or /images/)
+    """
     context = {
         "images_list": client.images.all(),
     }
     return render(request, "lxd/images.html", context)
 
 
-def image_detail(request, image_fingerprint):
+def image_detail(request, image_fingerprint: str):
+    """Details about images.
+
+    Args:
+        image_fingerprint (str):Sha2 hash of the image data itself. This unique key identifies the image.
+
+    Returns:
+        /image_detail.html (or /image/<str:image_fingerprint>/)
+    """
     # FIXME: Add support for 404
-    context = {
-        "image": client.images.get(image_fingerprint),
-    }
+    context = {"image": client.images.get(image_fingerprint)}
     return render(request, "lxd/image_detail.html", context)
 
 
 def list_networks(request):
-    context = {
-        "networks_list": client.networks.all(),
-    }
+    """List networks available to LXD.
+
+    Returns:
+        /networks.html (or /networks/)
+    """
+    context = {"networks_list": client.networks.all()}
     return render(request, "lxd/networks.html", context)
 
 
-def network_detail(request, network_name):
+def network_detail(request, network_name: str):
+    """Details about network.
+
+    Args:
+        network_name (str): The name of the network.
+
+    Returns:
+        /networks.html (or /network/<str:network_name>/)
+    """
     # FIXME: Add support for 404
     network = client.networks.get(network_name)
 
@@ -181,15 +227,26 @@ def network_detail(request, network_name):
 
 
 def list_storage(request):
+    """List storage pools.
+
+    Returns:
+        /storage.html (or /storage_pools/)
+    """
     storage_pools = client.storage_pools.all()
-    context = {
-        "storage_pools": storage_pools,
-    }
+    context = {"storage_pools": storage_pools}
     return render(request, "lxd/storage.html", context)
 
 
 def storage_detail(request, storage_name: str):
-    # TODO: Add zfs, btrfs things
+    """Details about storage pools.
+
+    Args:
+        storage_name (str): Storage pool name.
+
+    Returns:
+        /storage_detail.html (or /storage/<str:storage_name>/)
+    """
+    # TODO: Add ZFS, Btrfs things
     storage = client.storage_pools.get(storage_name)
     context = {
         "volumes": storage.volumes.all(),
@@ -199,6 +256,11 @@ def storage_detail(request, storage_name: str):
 
 
 def list_profiles(request):
+    """List profiles.
+
+    Returns:
+        /profiles.html (or /profiles/)
+    """
     context = {
         "profiles_list": client.profiles.all(),
     }
@@ -206,6 +268,14 @@ def list_profiles(request):
 
 
 def profile_detail(request, profile_name: str):
+    """Details about profiles.
+
+    Args:
+        profile_name (str): Profile name.
+
+    Returns:
+        /profile_detail.html (or /profile/<str:profile_name>/)
+    """
     context = {
         "profile": client.profiles.get(profile_name),
     }
@@ -213,13 +283,24 @@ def profile_detail(request, profile_name: str):
 
 
 def list_projects(request):
-    context = {
-        "projects_list": client.projects.all(),
-    }
+    """List projects. A project holds it own set of instances and may have its own images and profiles.
+
+    Returns:
+        /projects.html (or /projects/)
+    """
+    context = {"projects_list": client.projects.all()}
     return render(request, "lxd/projects.html", context)
 
 
 def project_detail(request, project_name: str):
+    """Details about projects.
+
+    Args:
+        project_name (str): Name of project.
+
+    Returns:
+        /project_detail.html (or /project/<str:project_name>/)
+    """
     project = client.projects.get(project_name)
     context = {
         "project": project,
@@ -232,6 +313,11 @@ def project_detail(request, project_name: str):
 
 
 def list_certificates(request):
+    """List certificates. Certificates are used to mange authentications in LXD.
+
+    Returns:
+        /certificates.html (or /certificates/)
+    """
     context = {
         "certificates_list": client.certificates.all(),
     }
@@ -239,6 +325,12 @@ def list_certificates(request):
 
 
 def create_instance(request):
+    """Create new container or VM. You can add name, description and image.
+
+    Returns:
+        container_detail/vm_detail: Depending if you created a container or a virtual machine
+        you will get sent to the detail page for the correct type.
+    """
     if request.method == "POST":
         form = CreateInstanceForm(request.POST)
 
@@ -288,7 +380,11 @@ def create_instance(request):
 
 
 def create_network(request):
-    # FIXME: Error: Failed clearing firewall: Failed clearing nftables rules for network "plsremove": EOF
+    """Create a new network.
+
+    Returns:
+        /network_create.html (or /certificates/)
+    """
     if request.method == "POST":
         form = CreateNetworkForm(request.POST)
 

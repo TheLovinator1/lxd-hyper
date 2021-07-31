@@ -1,10 +1,11 @@
 import psutil
+
 from lxd.apps import client
 from lxd.bytes2human import bytes2human
 
 
 def psutil_stats(request):
-    """Top right stats, memory and cpu usage"""
+    """Stats, memory and cpu usage in top right corner."""
     cpu_usage = psutil.cpu_percent(interval=None)
     mem_used = psutil.virtual_memory().used
     mem_total = psutil.virtual_memory().total
@@ -24,7 +25,11 @@ def psutil_stats(request):
 
 
 def sidebar(request):
-    """Sidebar, containers and VMs"""
+    """Context processor for sidebar, containers and VMs.
+
+    Returns:
+        Container list and VM list.
+    """
     container_list = client.containers.all()
     vm_list = client.virtual_machines.all()
 

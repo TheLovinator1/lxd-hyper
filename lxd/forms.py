@@ -60,7 +60,10 @@ IMAGES_amd64 = (
 
 
 class CreateInstanceForm(forms.Form):
-    """Create container or VM"""
+    """Create form for new instances.
+
+    Instance can be container or virtual machine.
+    """
 
     name = forms.CharField(
         label="Name",
@@ -69,9 +72,9 @@ class CreateInstanceForm(forms.Form):
         required=False,
         help_text="The name of the container or VM.",
         validators=[
-            RegexValidator("^[a-zA-Z0-9-]*$", message="Only letters, numbers and dashes are allowed"),
-            RegexValidator("^[\d-]", message="Name can't start with a digit or a dash", inverse_match=True),
-            RegexValidator("-$", message="Name can't end with a dash", inverse_match=True),
+            RegexValidator(r"^[a-zA-Z0-9-]*$", message="Only letters, numbers and dashes are allowed"),
+            RegexValidator(r"^[\d-]", message="Name can't start with a digit or a dash", inverse_match=True),
+            RegexValidator(r"-$", message="Name can't end with a dash", inverse_match=True),
         ],
     )
     image = forms.CharField(
@@ -103,7 +106,18 @@ NETWORK_TYPE_CHOICES = [
 
 
 class CreateNetworkForm(forms.Form):
-    """Create new network"""
+    """Create form for network creation.
+
+    Fields:
+        name: Network name, 100 characters long.
+        description: Network description.
+        network_type:
+            bridge: Bridge, this is the default.
+            macvlan: MACVLAN.
+            sriov: SR-IOV
+            ovn: OVN (Open Virtual Network)
+            physical: Physical NIC.
+    """
 
     name = forms.CharField(
         label="Name",
