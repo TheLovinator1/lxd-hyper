@@ -85,7 +85,8 @@ def instance_start(request, instance_name):
         print(f"{instance_name} is already running")
     else:
         print(f"Starting {instance_name}")
-        instance.start()
+        instance.start(wait=True)
+
     return redirect("container_detail", instance_name)
 
 
@@ -96,7 +97,8 @@ def instance_stop(request, instance_name):
         print(f"{instance_name} is already stopped")
     else:
         print(f"Stopping {instance_name}")
-        instance.stop()
+        instance.stop(wait=True)
+
     return redirect("container_detail", instance_name)
 
 
@@ -105,7 +107,7 @@ def instance_restart(request, instance_name):
     instance = client.instances.get(instance_name)
     if instance.state == "Running":
         print(f"Restarting {instance_name}")
-        instance.restart()
+        instance.restart(wait=True)
     else:
         print("Instance needs to be running")
 
@@ -120,11 +122,11 @@ def instance_suspend(request, instance_name):
             print(f"{instance_name} is already suspended")
 
         print(f"Suspending {instance_name}")
-        instance.freeze()
-
-        return redirect("container_detail", instance_name)
+        instance.freeze(wait=True)
     else:
         print("Instance is not running")
+
+    return redirect("container_detail", instance_name)
 
 
 def instance_resume(request, instance_name):
@@ -134,11 +136,11 @@ def instance_resume(request, instance_name):
         if instance.state == "Running":
             print(f"{instance_name} is already resumed")
         print(f"Resuming {instance_name}")
-        instance.unfreeze()
-
-        return redirect("container_detail", instance_name)
+        instance.unfreeze(wait=True)
     else:
         print("Instance needs to be suspended")
+
+    return redirect("container_detail", instance_name)
 
 
 def vm_detail(request, vm_name: str):
@@ -395,6 +397,7 @@ def create_network(request):
                 description=form.cleaned_data.get("description"),
                 type=form.cleaned_data.get("network_type"),
                 config={},
+                wait=True,
             )
             return HttpResponseRedirect(
                 reverse("network_detail", kwargs={"network_name": form.cleaned_data.get("name")})
@@ -409,8 +412,11 @@ def create_network(request):
     )
 
 
-def instace_snapshots(request, instance_name):
+def instace_snapshots(request, instance_name: str):
     """List all snapshots for this instance.
+
+    Args:
+        instance_name (str): Container or VM name.
 
     Returns:
         /snapshots.html (or /snapshots/)
@@ -423,8 +429,15 @@ def instace_snapshots(request, instance_name):
     return render(request, "lxd/snapshots.html", context)
 
 
-def snapshot_create(request, instance_name):
-    """Make new snapshot"""
+def snapshot_create(request, instance_name: str):
+    """Create new snapshot.
+
+    Args:
+        instance_name (str): Container or VM name.
+
+    Returns:
+        /container/<str:instance_name>/snapshot_create
+    """
     instance = client.instances.get(instance_name)
 
     if request.method == "POST":
@@ -432,8 +445,7 @@ def snapshot_create(request, instance_name):
 
         if form.is_valid():
             instance.snapshots.create(
-                form.cleaned_data.get("name"),
-                stateful=form.cleaned_data.get("stateful"),
+                form.cleaned_data.get("name"), stateful=form.cleaned_data.get("stateful"), wait=True
             )
             return HttpResponseRedirect(reverse("instace_snapshots", kwargs={"instance_name": instance_name}))
     else:
@@ -446,7 +458,7 @@ def snapshot_create(request, instance_name):
     )
 
 
-def snapshot_detail(request, instance_name, snapshot_name):
+def snapshot_detail(request, instance_name: str, snapshot_name: str):
     """Details about a snapshot.
 
     Returns:
@@ -461,3 +473,19 @@ def snapshot_detail(request, instance_name, snapshot_name):
     }
 
     return render(request, "lxd/snapshot_detail.html", context)
+
+
+def snapshot_remove(request, instance_name: str, snapshot_name: str):
+    """Remove snapshot.
+
+    Args:
+        instance_name (str): Container or VM name.
+        snapshot_name (str): Snapshot name.
+
+    Returns:
+        /container/<str:instance_name>/snapshot/<str:snapshot_name>/remove
+    """
+    instance = client.instances.get(instance_name)
+    snapshot = instance.snapshots.get(snapshot_name)
+    snapshot.delete(wait=True)
+    return HttpResponseRedirect(reverse("instace_snapshots", kwargs={"instance_name": instance_name}))

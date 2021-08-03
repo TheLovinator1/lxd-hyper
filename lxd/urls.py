@@ -141,10 +141,16 @@ urlpatterns = [
         views.snapshot_create,
         name="snapshot_create",
     ),
-    # /container/neat-emu/snapshot_create
+    # /container/neat-emu/snapshot/before-update
     path(
         "container/<str:instance_name>/snapshot/<str:snapshot_name>/",
         views.snapshot_detail,
         name="snapshot_detail",
+    ),
+    # /container/neat-emu/start
+    path(
+        "container/<str:instance_name>/snapshot/<str:snapshot_name>/remove",
+        views.snapshot_remove,
+        name="snapshot_remove",
     ),
 ]
