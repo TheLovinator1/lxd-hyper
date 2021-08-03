@@ -2,7 +2,7 @@
 
 {% block content %}
 <h1>{{ network.name }}</h1>
-
+<a href="{% url 'network_delete' network_name=network.name %}">Remove</a>
 <h3>Network attributes</h3>
 {% if network.description|length > 0 %}
 <li><strong>Description:</strong> {{ network.description }}</li>

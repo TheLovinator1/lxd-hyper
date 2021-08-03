@@ -99,6 +99,12 @@ urlpatterns = [
         views.create_network,
         name="create_network",
     ),
+    # /network/lxdbr0/remove
+    path(
+        "network/<str:network_name>/remove",
+        views.network_delete,
+        name="network_delete",
+    ),
     # /container/neat-emu/start
     path(
         "container/<str:instance_name>/start/",

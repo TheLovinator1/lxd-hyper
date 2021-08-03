@@ -228,6 +228,20 @@ def network_detail(request, network_name: str):
     return render(request, "lxd/network_detail.html", context)
 
 
+def network_delete(request, network_name: str):
+    """Delete a network.
+
+    Args:
+        network_name (str): Network name.
+
+    Returns:
+        /container/<str:instance_name>/snapshot/<str:snapshot_name>/remove
+    """
+    network = client.networks.get(network_name)
+    network.delete(wait=True)
+    return HttpResponseRedirect(reverse("list_networks"))
+
+
 def list_storage(request):
     """List storage pools.
 
@@ -397,7 +411,6 @@ def create_network(request):
                 description=form.cleaned_data.get("description"),
                 type=form.cleaned_data.get("network_type"),
                 config={},
-                wait=True,
             )
             return HttpResponseRedirect(
                 reverse("network_detail", kwargs={"network_name": form.cleaned_data.get("name")})
