@@ -1,0 +1,7 @@
+{% extends 'lxd/base.html' %}
+
+{% block content %}
+<h1>{{ snapshot.name }}</h1>
+<li><strong>Created at:</strong> {{ snapshot.created_at }}</li>
+<li><strong>Stateful:</strong> {{ snapshot.stateful }}</li>
+{% endblock %}

@@ -121,7 +121,7 @@ class CreateNetworkForm(forms.Form):
 
     name = forms.CharField(
         label="Name",
-        max_length=100,
+        max_length=15,
         strip=True,
         required=False,
         help_text="The name of the network.",
@@ -135,4 +135,21 @@ class CreateNetworkForm(forms.Form):
     network_type = forms.CharField(
         label="Network type?",
         widget=forms.Select(choices=NETWORK_TYPE_CHOICES),
+    )
+
+
+class CreateNewSnapshotForm(forms.Form):
+    """Create form for snapshot creation."""
+
+    name = forms.CharField(
+        label="Name",
+        max_length=100,
+        strip=True,
+        required=False,
+        help_text="Snapshot name.",
+    )
+    stateful = forms.BooleanField(
+        label="Stateful?",
+        required=False,
+        help_text="Capture the contents of RAM",
     )

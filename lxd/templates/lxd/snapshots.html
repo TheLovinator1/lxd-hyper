@@ -1,0 +1,14 @@
+{% extends 'lxd/base.html' %}
+
+{% block content %}
+<a href="{% url 'snapshot_create' instance_name=instance_name %}">New snapshot</a>
+{% if snapshot_list %}
+<ul>
+    {% for snapshot in snapshot_list %}
+    <li><a href="{% url 'snapshot_detail' instance_name snapshot.name %}">{{ snapshot.name }} - {{ snapshot.created_at }}</a></li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>Found no snapshots for this instance.</p>
+{% endif %}
+{% endblock %}

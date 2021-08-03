@@ -101,32 +101,50 @@ urlpatterns = [
     ),
     # /container/neat-emu/start
     path(
-        "container/<str:container_name>/start/",
+        "container/<str:instance_name>/start/",
         views.instance_start,
         name="instance_start",
     ),
     # /container/neat-emu/stop
     path(
-        "container/<str:container_name>/stop/",
+        "container/<str:instance_name>/stop/",
         views.instance_stop,
         name="instance_stop",
     ),
     # /container/neat-emu/restart
     path(
-        "container/<str:container_name>/restart/",
+        "container/<str:instance_name>/restart/",
         views.instance_restart,
         name="instance_restart",
     ),
     # /container/neat-emu/suspend
     path(
-        "container/<str:container_name>/suspend/",
+        "container/<str:instance_name>/suspend/",
         views.instance_suspend,
         name="instance_suspend",
     ),
     # /container/neat-emu/resume
     path(
-        "container/<str:container_name>/resume/",
+        "container/<str:instance_name>/resume/",
         views.instance_resume,
         name="instance_resume",
+    ),
+    # /container/neat-emu/snapshots
+    path(
+        "container/<str:instance_name>/snapshots/",
+        views.instace_snapshots,
+        name="instace_snapshots",
+    ),
+    # /container/neat-emu/snapshot_create
+    path(
+        "container/<str:instance_name>/snapshot_create/",
+        views.snapshot_create,
+        name="snapshot_create",
+    ),
+    # /container/neat-emu/snapshot_create
+    path(
+        "container/<str:instance_name>/snapshot/<str:snapshot_name>/",
+        views.snapshot_detail,
+        name="snapshot_detail",
     ),
 ]

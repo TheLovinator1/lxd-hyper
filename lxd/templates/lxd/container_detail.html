@@ -3,11 +3,12 @@
 {% block content %}
 <h1>{{ container.name }}</h1>
 
-<a href="{% url 'instance_start' container_name=container.name %}">Start</a>
-<a href="{% url 'instance_stop' container_name=container.name %}">Stop</a>
-<a href="{% url 'instance_restart' container_name=container.name %}">Restart</a>
-<a href="{% url 'instance_suspend' container_name=container.name %}">Suspend</a>
-<a href="{% url 'instance_resume' container_name=container.name %}">Resume</a>
+<a href="{% url 'instance_start' instance_name=container.name %}">Start</a>
+<a href="{% url 'instance_stop' instance_name=container.name %}">Stop</a>
+<a href="{% url 'instance_restart' instance_name=container.name %}">Restart</a>
+<a href="{% url 'instance_suspend' instance_name=container.name %}">Suspend</a>
+<a href="{% url 'instance_resume' instance_name=container.name %}">Resume</a>
+<p><a href="{% url 'instace_snapshots' instance_name=container.name %}">Snapshots</a></p>
 <ul>
     <li><strong>Architecture:</strong> {{ container.architecture }}</li>
     <li><strong>Status:</strong> {{ container.status }}</li>

@@ -4,7 +4,7 @@ from django.urls import reverse
 
 from lxd.apps import client
 from lxd.bytes2human import bytes2human
-from lxd.forms import CreateInstanceForm, CreateNetworkForm
+from lxd.forms import CreateInstanceForm, CreateNetworkForm, CreateNewSnapshotForm
 
 # TODO: Disable virtual machine stuff if QEMU is not installed.
 
@@ -78,65 +78,65 @@ def add_extra_context_if_running(context, state):
     context["network_type"] = state.network["eth0"]["type"]
 
 
-def instance_start(request, container_name):
+def instance_start(request, instance_name):
     """Check if the instance is running and if not, start it."""
-    instance = client.instances.get(container_name)
+    instance = client.instances.get(instance_name)
     if instance.state == "Running":
-        print(f"{container_name} is already running")
+        print(f"{instance_name} is already running")
     else:
-        print(f"Starting {container_name}")
+        print(f"Starting {instance_name}")
         instance.start()
-    return redirect("container_detail", container_name)
+    return redirect("container_detail", instance_name)
 
 
-def instance_stop(request, container_name):
+def instance_stop(request, instance_name):
     """Check if the instance is stopped and if not, stop it."""
-    instance = client.instances.get(container_name)
+    instance = client.instances.get(instance_name)
     if instance.state == "Stopped":
-        print(f"{container_name} is already stopped")
+        print(f"{instance_name} is already stopped")
     else:
-        print(f"Stopping {container_name}")
+        print(f"Stopping {instance_name}")
         instance.stop()
-    return redirect("container_detail", container_name)
+    return redirect("container_detail", instance_name)
 
 
-def instance_restart(request, container_name):
+def instance_restart(request, instance_name):
     """Restart if instance is running."""
-    instance = client.instances.get(container_name)
+    instance = client.instances.get(instance_name)
     if instance.state == "Running":
-        print(f"Restarting {container_name}")
+        print(f"Restarting {instance_name}")
         instance.restart()
-
-        return redirect("container_detail", container_name)
     else:
         print("Instance needs to be running")
 
+    return redirect("container_detail", instance_name)
 
-def instance_suspend(request, container_name):
+
+def instance_suspend(request, instance_name):
     """Suspend running instance. Also called freeze."""
-    instance = client.instances.get(container_name)
+    instance = client.instances.get(instance_name)
     if instance.state != "Running":
         if instance.state == "Frozen":
-            print(f"{container_name} is already suspended")
+            print(f"{instance_name} is already suspended")
 
-        print(f"Suspending {container_name}")
+        print(f"Suspending {instance_name}")
         instance.freeze()
 
-        return redirect("container_detail", container_name)
+        return redirect("container_detail", instance_name)
     else:
         print("Instance is not running")
 
 
-def instance_resume(request, container_name):
+def instance_resume(request, instance_name):
     """Resume instance if suspended. Also called unfreeze."""
-    instance = client.instances.get(container_name)
+    instance = client.instances.get(instance_name)
     if instance.state != "Frozen":
         if instance.state == "Running":
-            print(f"{container_name} is already resumed")
-        print(f"Resuming {container_name}")
+            print(f"{instance_name} is already resumed")
+        print(f"Resuming {instance_name}")
         instance.unfreeze()
 
-        return redirect("container_detail", container_name)
+        return redirect("container_detail", instance_name)
     else:
         print("Instance needs to be suspended")
 
@@ -385,6 +385,7 @@ def create_network(request):
     Returns:
         /network_create.html (or /certificates/)
     """
+    # TODO: Fails with "Failed clearing firewall: Failed clearing nftables rules for network: EOF"
     if request.method == "POST":
         form = CreateNetworkForm(request.POST)
 
@@ -395,7 +396,9 @@ def create_network(request):
                 type=form.cleaned_data.get("network_type"),
                 config={},
             )
-
+            return HttpResponseRedirect(
+                reverse("network_detail", kwargs={"network_name": form.cleaned_data.get("name")})
+            )
     else:
         form = CreateNetworkForm()
 
@@ -404,3 +407,57 @@ def create_network(request):
         "lxd/network_create.html",
         {"form": form},
     )
+
+
+def instace_snapshots(request, instance_name):
+    """List all snapshots for this instance.
+
+    Returns:
+        /snapshots.html (or /snapshots/)
+    """
+    instance = client.instances.get(instance_name)
+    context = {
+        "snapshot_list": instance.snapshots.all(),
+        "instance_name": instance_name,
+    }
+    return render(request, "lxd/snapshots.html", context)
+
+
+def snapshot_create(request, instance_name):
+    """Make new snapshot"""
+    instance = client.instances.get(instance_name)
+
+    if request.method == "POST":
+        form = CreateNewSnapshotForm(request.POST)
+
+        if form.is_valid():
+            instance.snapshots.create(
+                form.cleaned_data.get("name"),
+                stateful=form.cleaned_data.get("stateful"),
+            )
+            return HttpResponseRedirect(reverse("instace_snapshots", kwargs={"instance_name": instance_name}))
+    else:
+        form = CreateNewSnapshotForm()
+
+    return render(
+        request,
+        "lxd/snapshot_create.html",
+        {"form": form},
+    )
+
+
+def snapshot_detail(request, instance_name, snapshot_name):
+    """Details about a snapshot.
+
+    Returns:
+        /snapshot_detail.html (or /container/<str:instance_name>/snapshot/<str:snapshot_name>)
+    """
+    # FIXME: Add support for 404
+    instance = client.instances.get(instance_name)
+    context = {
+        "snapshot": instance.snapshots.get(snapshot_name),
+        "instance_name": instance_name,
+        "snapshot_name": snapshot_name,
+    }
+
+    return render(request, "lxd/snapshot_detail.html", context)
