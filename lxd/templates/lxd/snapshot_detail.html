@@ -1,6 +1,4 @@
-{% extends 'lxd/base.html' %}
-
-{% block content %}
+{% extends 'lxd/base.html' %} {% block content %}
 <h1>{{ snapshot.name }}</h1>
 <a href="{% url 'snapshot_remove' instance_name snapshot.name %}">Delete</a>
 <li><strong>Created at:</strong> {{ snapshot.created_at }}</li>

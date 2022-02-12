@@ -1,15 +1,16 @@
-{% extends 'lxd/base.html' %}
-
-{% block content %}
+{% extends 'lxd/base.html' %} {% block content %}
 <a href="{% url 'create_network' %}">Create new network</a>
 
 {% if networks_list %}
 <ul>
-    {% for network in networks_list %}
-    <li><a href="{% url 'network_detail' network.name %}">{{ network.type }}: {{ network.name }}</a></li>
-    {% endfor %}
+  {% for network in networks_list %}
+  <li>
+    <a href="{% url 'network_detail' network.name %}"
+      >{{ network.type }}: {{ network.name }}</a
+    >
+  </li>
+  {% endfor %}
 </ul>
 {% else %}
 <p>Found no networks.</p>
-{% endif %}
-{% endblock %}
+{% endif %} {% endblock %}

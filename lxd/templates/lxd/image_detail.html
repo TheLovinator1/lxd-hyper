@@ -1,7 +1,8 @@
-{% extends 'lxd/base.html' %}
-
-{% block content %}
-<h1>{{ image.properties.os }} ({{ image.properties.release }}) - {{ image.filename }} - {{ image.fingerprint }}</h1>
+{% extends 'lxd/base.html' %} {% block content %}
+<h1>
+  {{ image.properties.os }} ({{ image.properties.release }}) - {{ image.filename
+  }} - {{ image.fingerprint }}
+</h1>
 
 <h3>Image attributes</h3>
 {% for alias in image.aliases %}
@@ -20,10 +21,18 @@
 <li><strong>Size:</strong> {{ image.size }} bytes</li>
 <li><strong>Uploaded at:</strong> {{ image.uploaded_at }}</li>
 <li><strong>Update source alias:</strong> {{ image.update_source.alias }}</li>
-<li><strong>Update source certificate:</strong> {{ image.update_source.certificate }}</li>
-<li><strong>Update source protocol:</strong> {{ image.update_source.protocol }}</li>
+<li>
+  <strong>Update source certificate:</strong> {{ image.update_source.certificate
+  }}
+</li>
+<li>
+  <strong>Update source protocol:</strong> {{ image.update_source.protocol }}
+</li>
 <li><strong>Update source server:</strong> {{ image.update_source.server }}</li>
-<li><strong>Update source image type:</strong> {{ image.update_source.image_type }}</li>
+<li>
+  <strong>Update source image type:</strong> {{ image.update_source.image_type
+  }}
+</li>
 
 <h3>Image properties</h3>
 <li><strong>Architecture:</strong> {{ image.properties.architecture }}</li>

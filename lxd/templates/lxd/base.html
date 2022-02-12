@@ -1,67 +1,54 @@
 {% load static %}
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="utf-8">
+  <head>
+    <meta charset="utf-8" />
     <title>lxd-hyper</title>
-</head>
+  </head>
 
-<body>
-    <link rel="stylesheet" href="{% static 'css/style.css'%}">
+  <body>
+    <link rel="stylesheet" href="{% static 'css/style.css'%}" />
 
     <!-- Navbar -->
     <div class="navbar-left">
-        <a href="{% url 'index' %}">🏠 Home</a>
-        <a href="{% url 'list_images' %}">💿 Images</a>
-        <a href="{% url 'list_storage' %}">🛀 Storage pools</a>
-        <a href="{% url 'list_networks' %}">📶 Networks</a>
-        <a href="{% url 'list_profiles' %}">🧔 Profiles</a>
-        <a href="{% url 'list_projects' %}">📽 Projects</a>
-        <a href="{% url 'list_certificates' %}">📜 Certificates</a>
+      <a href="{% url 'index' %}">🏠 Home</a>
+      <a href="{% url 'list_images' %}">💿 Images</a>
+      <a href="{% url 'list_storage' %}">🛀 Storage pools</a>
+      <a href="{% url 'list_networks' %}">📶 Networks</a>
+      <a href="{% url 'list_profiles' %}">🧔 Profiles</a>
+      <a href="{% url 'list_projects' %}">📽 Projects</a>
+      <a href="{% url 'list_certificates' %}">📜 Certificates</a>
     </div>
     <div class="navbar-right">
-        {{ loadavg }} | {{ mem_used }} / {{ mem_total }} 🐏 | {{ disk_free }} ({{ disk_percent }}% free)💾
-
+      {{ loadavg }} | {{ mem_used }} / {{ mem_total }} 🐏 | {{ disk_free }} ({{
+      disk_percent }}% free)💾
     </div>
     <!-- Sidebar -->
     <div class="sidebar">
-        <a href="{% url 'create_instance' %}">
-            <h4>💦 Create new</h4>
-        </a>
-        <h4>Containers:</h4>
-        {% if container_list %}
-        {% for container in container_list %}
-        <a href="{% url 'container_detail' container.name %}">
-            {% if container.status == "Stopped" %}🔴{% endif %}
-            {% if container.status == "Running"%}🟢{% endif %}
-            {% if container.status == "Frozen"%}⛄{% endif %}
-            {{ container.name }}
-        </a>
-        {% endfor %}
-        {% else %}
-        Found no containers.
-        {% endif %}
+      <a href="{% url 'create_instance' %}">
+        <h4>💦 Create new</h4>
+      </a>
+      <h4>Containers:</h4>
+      {% if container_list %} {% for container in container_list %}
+      <a href="{% url 'container_detail' container.name %}">
+        {% if container.status == "Stopped" %}🔴{% endif %} {% if
+        container.status == "Running"%}🟢{% endif %} {% if container.status ==
+        "Frozen"%}⛄{% endif %} {{ container.name }}
+      </a>
+      {% endfor %} {% else %} Found no containers. {% endif %}
 
-        <h4>Virtual Machines:</h4>
-        {% if vm_list %}
-        {% for vm in vm_list %}
-        <a href="{% url 'vm_detail' vm.name %}">
-            {% if vm.status == "Stopped" %}🔴{% endif %}
-            {% if vm.status == "Running"%}🟢{% endif %}
-            {{ vm.name }}
-        </a>
-        {% endfor %}
-        {% else %}
-        Found no VMs.
-        {% endif %}
+      <h4>Virtual Machines:</h4>
+      {% if vm_list %} {% for vm in vm_list %}
+      <a href="{% url 'vm_detail' vm.name %}">
+        {% if vm.status == "Stopped" %}🔴{% endif %} {% if vm.status ==
+        "Running"%}🟢{% endif %} {{ vm.name }}
+      </a>
+      {% endfor %} {% else %} Found no VMs. {% endif %}
     </div>
 
     <div class="main">
-        <!-- Content -->
-        {% block content %}
-        {% endblock %}
+      <!-- Content -->
+      {% block content %} {% endblock %}
     </div>
-</body>
-
+  </body>
 </html>

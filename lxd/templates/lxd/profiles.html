@@ -1,13 +1,13 @@
-{% extends 'lxd/base.html' %}
-
-{% block content %}
-{% if profiles_list %}
+{% extends 'lxd/base.html' %} {% block content %} {% if profiles_list %}
 <ul>
-    {% for profile in profiles_list %}
-    <li><a href="{% url 'profile_detail' profile.name %}">{{ profile.name }} - {{ profile.description }}</a></li>
-    {% endfor %}
+  {% for profile in profiles_list %}
+  <li>
+    <a href="{% url 'profile_detail' profile.name %}"
+      >{{ profile.name }} - {{ profile.description }}</a
+    >
+  </li>
+  {% endfor %}
 </ul>
 {% else %}
 <p>Found no profiles.</p>
-{% endif %}
-{% endblock %}
+{% endif %} {% endblock %}

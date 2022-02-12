@@ -1,13 +1,14 @@
-{% extends 'lxd/base.html' %}
-
-{% block content %}
-{% if images_list %}
+{% extends 'lxd/base.html' %} {% block content %} {% if images_list %}
 <ul>
-    {% for image in images_list %}
-    <li><a href="{% url 'image_detail' image.fingerprint %}">{{ image.filename }}</a> - {{ image.size }} bytes</li>
-    {% endfor %}
+  {% for image in images_list %}
+  <li>
+    <a href="{% url 'image_detail' image.fingerprint %}"
+      >{{ image.filename }}</a
+    >
+    - {{ image.size }} bytes
+  </li>
+  {% endfor %}
 </ul>
 {% else %}
 <p>Found no images.</p>
-{% endif %}
-{% endblock %}
+{% endif %} {% endblock %}

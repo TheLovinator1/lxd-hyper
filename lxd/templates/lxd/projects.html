@@ -1,13 +1,13 @@
-{% extends 'lxd/base.html' %}
-
-{% block content %}
-{% if projects_list %}
+{% extends 'lxd/base.html' %} {% block content %} {% if projects_list %}
 <ul>
-    {% for project in projects_list %}
-    <li><a href="{% url 'project_detail' project.name %}">{{ project.name }} - {{ project.description }}</a></li>
-    {% endfor %}
+  {% for project in projects_list %}
+  <li>
+    <a href="{% url 'project_detail' project.name %}"
+      >{{ project.name }} - {{ project.description }}</a
+    >
+  </li>
+  {% endfor %}
 </ul>
 {% else %}
 <p>Found no projects.</p>
-{% endif %}
-{% endblock %}
+{% endif %} {% endblock %}

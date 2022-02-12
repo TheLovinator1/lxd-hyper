@@ -1,6 +1,4 @@
-{% extends 'lxd/base.html' %}
-
-{% block content %}
+{% extends 'lxd/base.html' %} {% block content %}
 <h1>{{ network.name }}</h1>
 <a href="{% url 'network_delete' network_name=network.name %}">Remove</a>
 <h3>Network attributes</h3>
@@ -15,15 +13,8 @@
 
 {% if ipv4_address %}
 <li><strong>ipv4 address:</strong> {{ ipv4_address }}</li>
-{% endif %}
-
-{% if ipv4_nat %}
+{% endif %} {% if ipv4_nat %}
 <li><strong>ipv4 nat:</strong> {{ ipv4_nat }}</li>
-{% endif %}
-
-{% if ipv6_address %}
+{% endif %} {% if ipv6_address %}
 <li><strong>ipv6 address:</strong> {{ ipv6_address }}</li>
-{% endif %}
-
-
-{% endblock %}
+{% endif %} {% endblock %}
