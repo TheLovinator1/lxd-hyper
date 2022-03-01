@@ -72,9 +72,18 @@ class CreateInstanceForm(forms.Form):
         required=False,
         help_text="The name of the container or VM.",
         validators=[
-            RegexValidator(r"^[a-zA-Z0-9-]*$", message="Only letters, numbers and dashes are allowed"),
-            RegexValidator(r"^[\d-]", message="Name can't start with a digit or a dash", inverse_match=True),
-            RegexValidator(r"-$", message="Name can't end with a dash", inverse_match=True),
+            RegexValidator(
+                r"^[a-zA-Z0-9-]*$",
+                message="Only letters, numbers and dashes are allowed",
+            ),
+            RegexValidator(
+                r"^[\d-]",
+                message="Name can't start with a digit or a dash",
+                inverse_match=True,
+            ),
+            RegexValidator(
+                r"-$", message="Name can't end with a dash", inverse_match=True
+            ),
         ],
     )
     image = forms.CharField(

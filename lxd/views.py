@@ -67,9 +67,15 @@ def add_extra_context_if_running(context, state):
     context["network_ipv6_address"] = state.network["eth0"]["addresses"][1]["address"]
     context["network_ipv6_netmask"] = state.network["eth0"]["addresses"][1]["netmask"]
     context["network_ipv6_scope"] = state.network["eth0"]["addresses"][1]["scope"]
-    context["network_bytes_received"] = bytes2human(state.network["eth0"]["counters"]["bytes_received"])
-    context["network_bytes_sent"] = bytes2human(state.network["eth0"]["counters"]["bytes_sent"])
-    context["network_packets_received"] = state.network["eth0"]["counters"]["packets_received"]
+    context["network_bytes_received"] = bytes2human(
+        state.network["eth0"]["counters"]["bytes_received"]
+    )
+    context["network_bytes_sent"] = bytes2human(
+        state.network["eth0"]["counters"]["bytes_sent"]
+    )
+    context["network_packets_received"] = state.network["eth0"]["counters"][
+        "packets_received"
+    ]
     context["network_packets_sent"] = state.network["eth0"]["counters"]["packets_sent"]
     context["network_hwaddr"] = state.network["eth0"]["hwaddr"]
     context["network_host_name"] = state.network["eth0"]["host_name"]
@@ -224,7 +230,9 @@ def network_detail(request, network_name: str):
         if network.config["ipv4.nat"]:
             context["ipv4_nat"] = network.config["ipv4.nat"]
         if network.config["ipv6.address"]:
-            context["ipv6_address"] = network.config["ipv6.address"]  # TODO: Check if ipv6_nat exists
+            context["ipv6_address"] = network.config[
+                "ipv6.address"
+            ]  # TODO: Check if ipv6_nat exists
     return render(request, "lxd/network_detail.html", context)
 
 
@@ -413,7 +421,10 @@ def create_network(request):
                 config={},
             )
             return HttpResponseRedirect(
-                reverse("network_detail", kwargs={"network_name": form.cleaned_data.get("name")})
+                reverse(
+                    "network_detail",
+                    kwargs={"network_name": form.cleaned_data.get("name")},
+                )
             )
     else:
         form = CreateNetworkForm()
@@ -458,9 +469,13 @@ def snapshot_create(request, instance_name: str):
 
         if form.is_valid():
             instance.snapshots.create(
-                form.cleaned_data.get("name"), stateful=form.cleaned_data.get("stateful"), wait=True
+                form.cleaned_data.get("name"),
+                stateful=form.cleaned_data.get("stateful"),
+                wait=True,
             )
-            return HttpResponseRedirect(reverse("instace_snapshots", kwargs={"instance_name": instance_name}))
+            return HttpResponseRedirect(
+                reverse("instace_snapshots", kwargs={"instance_name": instance_name})
+            )
     else:
         form = CreateNewSnapshotForm()
 
@@ -501,4 +516,6 @@ def snapshot_remove(request, instance_name: str, snapshot_name: str):
     instance = client.instances.get(instance_name)
     snapshot = instance.snapshots.get(snapshot_name)
     snapshot.delete(wait=True)
-    return HttpResponseRedirect(reverse("instace_snapshots", kwargs={"instance_name": instance_name}))
+    return HttpResponseRedirect(
+        reverse("instace_snapshots", kwargs={"instance_name": instance_name})
+    )

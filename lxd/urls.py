@@ -4,11 +4,7 @@ from . import views
 
 urlpatterns = [
     # /
-    path(
-        "",
-        views.index,
-        name="index",
-    ),
+    path("", views.index, name="index"),
     # /container/neat-emu/
     path(
         "container/<str:container_name>/",
