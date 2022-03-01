@@ -19,15 +19,9 @@ migrate = 'scripts.migrate:main'
 
 [tool.poetry.dependencies]
 python = "^3.9"
-Django = "^4.0.2"
+Django = "^4.0.3"
 pylxd = "^2.3.1"
 psutil = "^5.9.0"
-
-[tool.poetry.dev-dependencies]
-black = "^22.1.0"
-flake8 = "^4.0.1"
-mypy = "^0.931"
-bandit = "^1.7.3"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
